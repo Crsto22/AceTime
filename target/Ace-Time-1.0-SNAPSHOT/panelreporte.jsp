@@ -1,6 +1,8 @@
 <%@ page import="datos.Mantenimiento" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.naming.*, javax.sql.*" %>
+<%@ page import="datos.Marca" %>
 <%
     // Obtaining session variables
     Integer idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -11,6 +13,11 @@
         response.sendRedirect("index.jsp");
         return;
     }
+    
+    Mantenimiento mantenimiento2 = new Mantenimiento();
+mantenimiento2.conectarBD();
+List<Marca> marcas = mantenimiento2.obtenerMarcas();
+mantenimiento2.cerrarBD();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,18 +103,18 @@
                         <i class="fi fi-rs-signal-alt-2 text-xl"></i>
                         <span>Reportes</span>
                     </li>             
-                   
-                     <li onclick="window.location.href = 'panelmarcas.jsp'" 
+
+                    <li onclick="window.location.href = 'panelmarcas.jsp'" 
                         class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10 text-gray-600 hover:bg-orange-400 hover:text-white ">
                         <i class="fi fi-rs-tags text-xl"></i>                 
                         <span>Marcas</span>
                     </li>
                     <li  onclick="window.location.href = 'panelproveedores.jsp'" 
-                        class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10 text-gray-600 hover:bg-orange-400 hover:text-white ">
+                         class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10 text-gray-600 hover:bg-orange-400 hover:text-white ">
                         <i class="fi fi-rs-supplier-alt text-xl"></i>                
                         <span>Proveedores</span>
                     </li>
-                     <li onclick="window.location.href = 'panelcuenta.jsp'" 
+                    <li onclick="window.location.href = 'panelcuenta.jsp'" 
                         class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10  text-gray-600 hover:bg-orange-400 hover:text-white">
                         <i class="fi fi-rs-admin-alt text-xl"></i>                    
                         <span>Cuenta</span>
@@ -115,41 +122,47 @@
                 </ul>
             </div>
             <div id="main-content" class="md:ml-72 p-8">
-                <div class="container mx-auto mt-14 p-4">
-                    <div class="card shadow-lg bg-white p-6 rounded-lg">
-                        <h2 class="text-2xl font-bold mb-4">Generar Reportes</h2>
-                        <form id="reporteForm" action="ReporteVentas" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex flex-col space-y-2">
-                                <label for="fecha-inicio">Fecha de inicio:</label>
-                                <input type="text" id="fecha-inicio" name="fecha-inicio" class="form-input border border-gray-300 rounded-lg p-2" required>
+                <div role="tablist" class="tabs tabs-lifted mt-14">
+                    <!-- Tab 1 -->
+                    <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Ventas" checked />
+                    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 ">
+                        <form id="reporteForm" class="flex justify-center space-x-4">
+                            <div>
+                                <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+                                <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
                             </div>
-                            <div class="flex flex-col space-y-2">
-                                <label for="fecha-fin">Fecha de fin:</label>
-                                <input type="text" id="fecha-fin" name="fecha-fin" class="form-input border border-gray-300 rounded-lg p-2" required>
+                            <div>
+                                <label for="fecha-fin" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
+                                <input type="text" id="fecha-fin" name="fecha-fin" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
                             </div>
-                            <div class="">
-                                <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-700">Generar Reporte</button>
+                            <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600 self-end">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
+                        </form>
+
+                        <div id="toastContainer" class="fixed top-24 right-4 md:top-22 md:right-6 lg:top-24 lg:right-8 h-auto w-11/12 md:w-2/3 lg:w-1/2 max-w-sm mx-auto"></div>
+
+                    </div>
+
+                    <!-- Tab 2 -->
+                    <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Productos" />
+                    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                        <form class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <label for="brand" class="block text-sm font-medium text-gray-700">Marca</label>
+                                <select id="brand" name="brand" class="select select-bordered max-w-xs">
+                                    <option value="all">Todos</option>
+                                    <% for (Marca marca : marcas) { %>
+                                    <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
+                                    <% } %>
+                                </select>
                             </div>
+                            <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
                         </form>
                     </div>
                 </div>
-                <div id="toastContainer" class="fixed bottom-4 right-4"></div>
             </div>
 
-            <script>
-        const fechaInicio = flatpickr("#fecha-inicio", {
-            dateFormat: "Y-m-d",
-            onChange: function(selectedDates, dateStr, instance) {
-                fechaFin.set('minDate', dateStr);
-            }
-        });
 
-        
-        const fechaFin = flatpickr("#fecha-fin", {
-            dateFormat: "Y-m-d",
-            minDate: fechaInicio.input.value
-        });
-    </script>
+
             <script>
                 const menuBtn = document.getElementById("menu-btn");
                 const sidebar = document.getElementById("sidebar");
@@ -173,47 +186,63 @@
             </script>
             <script src="js/sidebar.js"></script>
             <script>
-document.getElementById('reporteForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting normally
+                document.addEventListener('DOMContentLoaded', function () {
+                    var startDatePicker = flatpickr('#fecha-inicio', {
+                        dateFormat: 'Y-m-d',
+                        onChange: function (selectedDates, dateStr, instance) {
+                            endDatePicker.set('minDate', dateStr);
+                        }
+                    });
 
-    var fechaInicio = document.getElementById('fecha-inicio').value;
-    var fechaFin = document.getElementById('fecha-fin').value;
-    var toastContainer = document.getElementById('toastContainer');
+                    var endDatePicker = flatpickr('#fecha-fin', {
+                        dateFormat: 'Y-m-d',
+                        onChange: function (selectedDates, dateStr, instance) {
+                            startDatePicker.set('maxDate', dateStr);
+                        }
+                    });
 
-    // Clear previous toast messages
-    toastContainer.innerHTML = '';
+                    document.getElementById('reporteForm').addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent the form from submitting normally
 
-    if (!fechaInicio || !fechaFin) {
-        // Create the toast message
-        var toast = document.createElement('div');
-        toast.className = 'fixed top-24 right-4 md:top-22 md:right-6 lg:top-24 lg:right-8 h-auto w-11/12 md:w-2/3 lg:w-1/2 max-w-sm mx-auto bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700 animate__animated animate__fadeInDown';
-        toast.setAttribute('role', 'alert');
+                        var fechaInicio = document.getElementById('fecha-inicio').value;
+                        var fechaFin = document.getElementById('fecha-fin').value;
+                        var toastContainer = document.getElementById('toastContainer');
 
-        toast.innerHTML = `
-            <div class="flex p-4">
-                <div class="flex-shrink-0">
-                    <svg class="flex-shrink-0 size-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8 7.293 5.354 4.646z"></path>
-                    </svg>
-                </div>
-                <div class="ms-3">
-                    <p class="text-sm text-gray-700 dark:text-neutral-400 ml-2">
-                        Seleccione la fecha de inicio y salida
-                    </p>
-                </div>
-            </div>
-        `;
-        toastContainer.appendChild(toast);
+                        // Clear previous toast messages
+                        toastContainer.innerHTML = '';
 
-        // Optionally, set a timeout to remove the toast after a few seconds
-        setTimeout(function() {
-            toast.remove();
-        }, 3000);
-    } else {
-        // If both dates are provided, submit the form
-        event.target.submit();
-    }
-});
-</script>
+                        if (!fechaInicio || !fechaFin) {
+                            // Create the toast message
+                            var toast = document.createElement('div');
+                            toast.className = 'fixed top-24 right-4 md:top-22 md:right-6 lg:top-24 lg:right-8 h-auto w-11/12 md:w-2/3 lg:w-1/2 max-w-sm mx-auto bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700 animate__animated animate__fadeInDown';
+                            toast.setAttribute('role', 'alert');
+
+                            toast.innerHTML = `
+                    <div class="flex p-4">
+                        <div class="flex-shrink-0">
+                            <svg class="flex-shrink-0 size-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8 7.293 5.354 4.646z"></path>
+                            </svg>
+                        </div>
+                        <div class="ms-3">
+                            <p class="text-sm text-gray-700 dark:text-neutral-400 ml-2">
+                                Seleccione la fecha de inicio y salida
+                            </p>
+                        </div>
+                    </div>
+                `;
+                            toastContainer.appendChild(toast);
+
+                            // Optionally, set a timeout to remove the toast after a few seconds
+                            setTimeout(function () {
+                                toast.remove();
+                            }, 3000);
+                        } else {
+                            // If both dates are provided, submit the form
+                            event.target.submit();
+                        }
+                    });
+                });
+            </script>
     </body>
 </html>
