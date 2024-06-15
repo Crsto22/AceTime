@@ -145,11 +145,11 @@ mantenimiento2.cerrarBD();
                     <!-- Tab 2 -->
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Productos" />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-                        <form class="flex items-center space-x-4">
+                        <form action="ReporteProductos" method="GET" class="flex items-center space-x-4">
                             <div class="flex items-center space-x-2">
                                 <label for="brand" class="block text-sm font-medium text-gray-700">Marca</label>
                                 <select id="brand" name="brand" class="select select-bordered max-w-xs">
-                                    <option value="all">Todos</option>
+                                    <option value="todos">Todos</option>
                                     <% for (Marca marca : marcas) { %>
                                     <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
                                     <% } %>
