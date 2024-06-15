@@ -164,8 +164,8 @@ mantenimiento3.cerrarBD();
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="descripcionEdit2" class="block text-sm font-semibold mb-2">Descripci贸n</label>
-                                    <textarea name="descripcion2" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripci贸n" required></textarea>
+                                    <label for="descripcionEdit2" class="block text-sm font-semibold mb-2">Descripci髇</label>
+                                    <textarea name="descripcion2" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripci髇" required></textarea>
                                 </div>
 
                                 <div class="mb-4">
@@ -207,7 +207,7 @@ mantenimiento3.cerrarBD();
                             <tr>
                                 <th class="p-3">ID</th>
                                 <th class="p-3">Marca</th>
-                                <th class="p-3">Descripci贸n</th>
+                                <th class="p-3">Descripci髇</th>
                                 <th class="p-3">Precio</th>
                                 <th class="p-3">Cantidad</th> 
                                 <th class="p-3">Imagen</th>
@@ -285,8 +285,8 @@ mantenimiento3.cerrarBD();
                                                     </div>
 
                                                     <div class="mb-4">
-                                                        <label for="descripcionEdit2" class="block text-sm font-semibold mb-2">Descripci贸n</label>
-                                                        <textarea name="descripcion" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripci贸n" required><%= resultSet.getString("descripcion") %></textarea>
+                                                        <label for="descripcionEdit2" class="block text-sm font-semibold mb-2">Descripci髇</label>
+                                                        <textarea name="descripcion" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripci髇" required><%= resultSet.getString("descripcion") %></textarea>
                                                     </div>
 
                                                     <div class="mb-4">
@@ -344,9 +344,9 @@ mantenimiento3.cerrarBD();
                                                 <circle class="st0" cx="64" cy="64" r="64"/>
                                                 <path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/>
                                                 </svg>
-                                                <h3 class="ml-6 font-bold text-lg">驴Est谩s seguro de eliminar el producto <%= resultSet.getString("descripcion") %>?</h3>
+                                                <h3 class="ml-6 font-bold text-lg">縀st醩 seguro de eliminar el producto <%= resultSet.getString("descripcion") %>?</h3>
                                             </div>
-                                            <p class="py-4">Esta acci贸n no se puede deshacer.</p>
+                                            <p class="py-4">Esta acci髇 no se puede deshacer.</p>
                                             <div class="flex justify-end">
                                                 <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_producto") %>').close()">Cancelar</button>
                                                 <form action="crudeliminarproducto.jsp" method="post">

@@ -144,18 +144,18 @@
                                             <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="input input-bordered w-full" placeholder="Nombre del proveedor" required>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="telefono_proveedor" class="block text-gray-700 mb-2">Tel茅fono</label>
-                                            <input type="tel" id="telefono_proveedor" name="telefono_proveedor" class="input input-bordered w-full" placeholder="Tel茅fono del proveedor" maxlength="9" pattern="[0-9]{9}">
+                                            <label for="telefono_proveedor" class="block text-gray-700 mb-2">Tel閒ono</label>
+                                            <input type="tel" id="telefono_proveedor" name="telefono_proveedor" class="input input-bordered w-full" placeholder="Tel閒ono del proveedor" maxlength="9" pattern="[0-9]{9}">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="correo_proveedor" class="block text-gray-700 mb-2">Correo Electr贸nico</label>
-                                            <input type="email" id="correo_proveedor" name="correo_proveedor" class="input input-bordered w-full" placeholder="Correo electr贸nico del proveedor">
+                                            <label for="correo_proveedor" class="block text-gray-700 mb-2">Correo Electr髇ico</label>
+                                            <input type="email" id="correo_proveedor" name="correo_proveedor" class="input input-bordered w-full" placeholder="Correo electr髇ico del proveedor">
                                         </div>
                                         <div class="mb-4">
                                             <label for="ruc_proveedor" class="block text-gray-700 mb-2">RUC</label>
                                             <input type="text" id="ruc_proveedor" name="ruc_proveedor" class="input input-bordered w-full" placeholder="RUC del proveedor" maxlength="11" pattern="[0-9]{11}">
                                         </div>
-                                        <button type="submit" class="btn btn-success text-white w-full">A帽adir Proveedor</button>
+                                        <button type="submit" class="btn btn-success text-white w-full">A馻dir Proveedor</button>
                                     </form>
                                 </div>
                             </div>
@@ -167,8 +167,8 @@
                                 <tr class="bg-gray-200">
                                     <th class="px-4 py-2 text-gray-600">ID</th>
                                     <th class="px-4 py-2 text-gray-600">Nombre del Proveedor</th>
-                                    <th class="px-4 py-2 text-gray-600">Tel茅fono</th>
-                                    <th class="px-4 py-2 text-gray-600">Correo Electr贸nico</th>
+                                    <th class="px-4 py-2 text-gray-600">Tel閒ono</th>
+                                    <th class="px-4 py-2 text-gray-600">Correo Electr髇ico</th>
                                     <th class="px-4 py-2 text-gray-600">RUC</th>
                                     <th class="px-4 py-2 text-gray-600">Acciones</th>
                                 </tr>
@@ -220,12 +220,12 @@
                                                             <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="input input-bordered w-full" placeholder="Nombre del proveedor" value="<%= resultSet.getString("nombre_proveedor") %>" required>
                                                         </div>
                                                         <div class="mb-4">
-                                                            <label for="telefono_proveedor" class="block text-gray-700 mb-2">Tel茅fono</label>
-                                                            <input type="text" id="telefono_proveedor" name="telefono_proveedor" class="input input-bordered w-full" placeholder="Tel茅fono del proveedor" value="<%= resultSet.getString("telefono_proveedor") %>">
+                                                            <label for="telefono_proveedor" class="block text-gray-700 mb-2">Tel閒ono</label>
+                                                            <input type="text" id="telefono_proveedor" name="telefono_proveedor" class="input input-bordered w-full" placeholder="Tel閒ono del proveedor" value="<%= resultSet.getString("telefono_proveedor") %>">
                                                         </div>
                                                         <div class="mb-4">
-                                                            <label for="correo_proveedor" class="block text-gray-700 mb-2">Correo Electr贸nico</label>
-                                                            <input type="email" id="correo_proveedor" name="correo_proveedor" class="input input-bordered w-full" placeholder="Correo electr贸nico del proveedor" value="<%= resultSet.getString("correo_proveedor") %>">
+                                                            <label for="correo_proveedor" class="block text-gray-700 mb-2">Correo Electr髇ico</label>
+                                                            <input type="email" id="correo_proveedor" name="correo_proveedor" class="input input-bordered w-full" placeholder="Correo electr髇ico del proveedor" value="<%= resultSet.getString("correo_proveedor") %>">
                                                         </div>
                                                         <div class="mb-4">
                                                             <label for="ruc_proveedor" class="block text-gray-700 mb-2">RUC</label>
@@ -259,9 +259,9 @@
                                                     <circle class="st0" cx="64" cy="64" r="64"/>
                                                     <path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/>
                                                     </svg>
-                                                    <h3 class="ml-6 font-bold text-lg">驴Est谩s seguro de eliminar el proveedor <%= resultSet.getString("nombre_proveedor") %>?</h3>
+                                                    <h3 class="ml-6 font-bold text-lg">縀st醩 seguro de eliminar el proveedor <%= resultSet.getString("nombre_proveedor") %>?</h3>
                                                 </div>
-                                                <p class="py-4">Esta acci贸n no se puede deshacer.</p>
+                                                <p class="py-4">Esta acci髇 no se puede deshacer.</p>
                                                 <div class="flex justify-end">
                                                     <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_proveedor") %>').close()">Cancelar</button>
                                                     <form action="eliminarproveedor.jsp" method="post">

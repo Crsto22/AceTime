@@ -145,14 +145,14 @@
             <div id="main-content" class="md:ml-72 p-8">
                 <div class="container mx-auto mt-10 bg-white">
                     <div class="card shadow-lg p-6 rounded-lg">
-                        <h2 class="text-2xl font-bold mb-4">ConfiguraciÃ³n de Cuenta</h2>
+                        <h2 class="text-2xl font-bold mb-4">Configuración de Cuenta</h2>
                         <div>
                             <p class="mb-2">Nombre de usuario: <span class="font-semibold"><%= session.getAttribute("nombre_usuario") %></span></p>
                             <p class="mb-2">Apellidos: <span class="font-semibold"><%= session.getAttribute("apellidos") %></span></p>
                             <p class="mb-2">Nombres: <span class="font-semibold"><%= session.getAttribute("nombre") %></span></p>
                             <p class="mb-2">Correo Electronico: <span class="font-semibold"><%= session.getAttribute("correo") %></span></p>
                             <p class="mb-2">Numero de documento: <span class="font-semibold"><%= session.getAttribute("Num_Documento") %></span></p>
-                            <p class="mb-2">Telefono: <span class="font-semibold"><%= session.getAttribute("telefono") %></span></p>
+                            <p class="mb-2">Teléfono: <span class="font-semibold"><%= session.getAttribute("telefono") %></span></p>
 
                         </div>
                         <button class="btn btn-error text-white w-max" onclick="my_modal_3.showModal()">Editar Datos</button>
@@ -187,8 +187,8 @@
                                         <input id="correo" name="correo" type="email" required value="<%= session.getAttribute("correo") %>" class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su correo">
                                     </div>
                                     <div>
-                                        <label for="contrasena" class="block text-sm font-medium text-gray-700">ContraseÃ±a</label>
-                                        <input id="contrasena" name="contrasena" type="password" value="<%= session.getAttribute("contrasena") %>" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su contraseÃ±a">
+                                        <label for="contrasena" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                        <input id="contrasena" name="contrasena" type="password" value="<%= session.getAttribute("contrasena") %>" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su contraseña">
                                     </div>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
@@ -204,8 +204,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label for="telefono" class="block text-sm font-medium text-gray-700">TelÃ©fono</label>
-                                        <input id="telefono" name="telefono" type="tel" value="<%= session.getAttribute("telefono") %>" pattern="^[0-9]{9}$" maxlength="9" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su telÃ©fono">
+                                        <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                        <input id="telefono" name="telefono" type="tel" value="<%= session.getAttribute("telefono") %>" pattern="^[0-9]{9}$" maxlength="9" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su teléfono">
                                     </div>
                                     <div>
                                         <button type="submit" class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">Actualizar</button>

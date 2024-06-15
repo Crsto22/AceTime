@@ -231,9 +231,9 @@
                                                     <circle class="st0" cx="64" cy="64" r="64"/>
                                                     <path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/>
                                                     </svg>
-                                                    <h3 class="ml-6 font-bold text-lg">Â¿EstÃ¡s seguro de eliminar la marca <%= resultSet.getString("nombre_marca") %> ?</h3>
+                                                    <h3 class="ml-6 font-bold text-lg">¿Estás seguro de eliminar la marca <%= resultSet.getString("nombre_marca") %> ?</h3>
                                                 </div>
-                                                <p class="py-4">Esta acciÃ³n no se puede deshacer.</p>
+                                                <p class="py-4">Esta acción no se puede deshacer.</p>
                                                 <div class="flex justify-end">
                                                     <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_marca") %>').close()">Cancelar</button>
                                                     <form action="eliminarmarca.jsp" method="post">
