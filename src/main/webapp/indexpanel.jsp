@@ -401,12 +401,12 @@
        Mantenimiento mantenimiento6 = new Mantenimiento();
        mantenimiento6.conectarBD();
        Connection connection6 = mantenimiento6.getConexion(); 
-PreparedStatement statement6 = connection6.prepareStatement("SELECT pc.id_producto, p.descripcion AS producto, SUM(pc.cantidad_comprado) AS total_comprado FROM Productos_Comprados pc JOIN Productos p ON pc.id_producto = p.id_producto GROUP BY pc.id_producto, p.descripcion ORDER BY total_comprado DESC LIMIT 3;");
+PreparedStatement statement6 = connection6.prepareStatement("SELECT producto, SUM(total_comprado) AS total_cantidad_comprada FROM ( SELECT producto, SUM(cantidad) AS total_comprado FROM Comprobante GROUP BY producto ORDER BY SUM(cantidad) DESC LIMIT 3 ) AS productos_mas_comprados GROUP BY producto;");
        ResultSet resultSet6 = statement6.executeQuery();
        while (resultSet6.next()) {
             %>
 
-                                                    {value: <%= resultSet6.getInt("total_comprado") %>, name: "<%= resultSet6.getString("producto") %>"},
+                                                    {value: <%= resultSet6.getInt("total_cantidad_comprada") %>, name: "<%= resultSet6.getString("producto") %>"},
             <%
                                         }
                                         resultSet6.close();
