@@ -24,6 +24,8 @@
         <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
         <link rel='stylesheet'
               href='https://cdn-uicons.flaticon.com/2.4.0/uicons-regular-straight/css/uicons-regular-straight.css'>
+        <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
     </head>
     <body class="overflow-x-hidden">
         <div class="min-h-screen w-screen bg-gray-100">
@@ -232,7 +234,6 @@
                                         }
                                     }
                                 %>
-
                             </div>
                         </div>
                     </div>
@@ -277,9 +278,13 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="container mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Contenedor de la Lista de Productos -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+
+                        <div class="bg-white  rounded-lg ">
+                            <div id="productChart" class="h-80 "></div>
+                        </div>
+                    </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-lg stat-value mb-4">Lista de Productos</h2>
                         <div class="overflow-y-auto max-h-96">
@@ -316,19 +321,21 @@
                             </button>
                         </div>
                     </div>
+                </div>          
+                <div class="container mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h2 class="text-lg stat-value mb-4 ">Últimas Ventas</h2>
+                        <h2 class="text-lg stat-value mb-4">Últimas ventas</h2>
                         <div class="overflow-y-auto max-h-96">
                             <ul class="divide-y divide-gray-300">
                                 <%
-   try {
-       Mantenimiento mantenimiento5 = new Mantenimiento();
-       mantenimiento5.conectarBD();
-       Connection connection5 = mantenimiento5.getConexion();
+        try {
+            Mantenimiento mantenimiento5 = new Mantenimiento();
+            mantenimiento5.conectarBD();
+            Connection connection5 = mantenimiento5.getConexion();
 
-       PreparedStatement statement5 = connection5.prepareStatement("SELECT * FROM Detalle_Compra ORDER BY fecha_compra DESC");
-       ResultSet resultSet5 = statement5.executeQuery();
-       while (resultSet5.next()) {
+            PreparedStatement statement5 = connection5.prepareStatement("SELECT * FROM Detalle_Compra ORDER BY fecha_compra DESC");
+            ResultSet resultSet5 = statement5.executeQuery();
+            while (resultSet5.next()) {
                                 %>
                                 <li class="flex justify-between items-center py-2">
                                     <span class="text-lg">Venta 00<%= resultSet5.getString("id_compra") %></span>
@@ -344,18 +351,145 @@
                                         e.printStackTrace();
                                     }
                                 %>
-
                             </ul>
                         </div>
                         <div class="mt-6">
-                            <button onclick="window.location.href = 'panelventas.jsp'" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-                                Gestionar Ventas
+                            <button onclick="window.location.href = 'panelproductos.jsp'" class="bg-orange-400 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                                Administrar Productos
                             </button>
                         </div>
                     </div>
-                </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="bg-white rounded-lg ">
+                            <div id="lineChart" class="h-80"></div>
+                        </div>     
+                    </div>
+                </div>  
             </div>
         </div>
         <script src="js/sidebar.js"></script>
+        <script>
+                                    const chartDom = document.getElementById("productChart");
+                                    const myChart = echarts.init(chartDom);
+                                    const option = {
+                                    title: {
+                                    text: "Productos Más Comprados",
+                                            left: "center",
+                                            top: 20,
+                                            textStyle: {
+                                            fontSize: 20,
+                                            },
+                                    },
+                                            tooltip: {
+                                            trigger: "item",
+                                                    formatter: "{a} <br/>{b} : {c} ({d}%)",
+                                            },
+                                            series: [
+                                            {
+                                            name: "Cantidad Vendida",
+                                                    type: "pie",
+                                                    radius: "55%",
+                                                    roseType: "angle",
+                                                    itemStyle: {
+                                                    borderRadius: 8,
+                                                            shadowBlur: 200,
+                                                            shadowColor: "rgba(0, 0, 0, 0.5)",
+                                                    },
+                                                    data: [
+            <%
+   try {
+       Mantenimiento mantenimiento6 = new Mantenimiento();
+       mantenimiento6.conectarBD();
+       Connection connection6 = mantenimiento6.getConexion(); 
+PreparedStatement statement6 = connection6.prepareStatement("SELECT pc.id_producto, p.descripcion AS producto, SUM(pc.cantidad_comprado) AS total_comprado FROM Productos_Comprados pc JOIN Productos p ON pc.id_producto = p.id_producto GROUP BY pc.id_producto, p.descripcion ORDER BY total_comprado DESC LIMIT 3;");
+       ResultSet resultSet6 = statement6.executeQuery();
+       while (resultSet6.next()) {
+            %>
+
+                                                    {value: <%= resultSet6.getInt("total_comprado") %>, name: "<%= resultSet6.getString("producto") %>"},
+            <%
+                                        }
+                                        resultSet6.close();
+                                        statement6.close();
+                                        mantenimiento6.cerrarBD();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+            %>
+                                                    ],
+                                                    emphasis: {
+                                                    itemStyle: {
+                                                    shadowBlur: 10,
+                                                            shadowOffsetX: 0,
+                                                            shadowColor: "rgba(0, 0, 0, 0.5)",
+                                                    },
+                                                    },
+                                            },
+                                            ],
+                                    };
+                                    myChart.setOption(option);
+        </script>
+        <script>
+            // Datos de ejemplo (simulando las últimas 4 ventas)
+            const ultimasVentas = [
+            <%
+   try {
+       Mantenimiento mantenimiento7 = new Mantenimiento();
+       mantenimiento7.conectarBD();
+       Connection connection7 = mantenimiento7.getConexion(); 
+PreparedStatement statement7 = connection7.prepareStatement("SELECT * FROM Detalle_Compra ORDER BY fecha_compra DESC LIMIT 4");
+       ResultSet resultSet7 = statement7.executeQuery();
+       while (resultSet7.next()) {
+            %>
+            {venta: "Venta <%= resultSet7.getString("id_compra") %>", monto: <%= resultSet7.getDouble("total_compra") %>},
+            <%
+                                        }
+                                        resultSet7.close();
+                                        statement7.close();
+                                        mantenimiento7.cerrarBD();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+            %>
+
+            ];
+            // Extraer nombres de ventas y montos para el gráfico
+            const nombresVentas = ultimasVentas.map((venta) => venta.venta);
+            const montosVentas = ultimasVentas.map((venta) => venta.monto);
+            // Configuración del gráfico de líneas
+            const lineDom = document.getElementById("lineChart");
+            const lineChart = echarts.init(lineDom);
+            const lineOption = {
+            title: {
+            text: "Últimas Ventas",
+                    left: "center",
+                    top: 20,
+                    textStyle: {
+                    fontSize: 20,
+                    },
+            },
+                    tooltip: {
+                    trigger: "axis",
+                            formatter: "{a} <br/>{b} : {c}",
+                    },
+                    xAxis: {
+                    type: "category",
+                            data: nombresVentas,
+                    },
+                    yAxis: {
+                    type: "value",
+                    },
+                    series: [
+                    {
+                    name: "Monto de Venta",
+                            type: "line",
+                            data: montosVentas,
+                            itemStyle: {color: "rgb(249, 168, 45)"},
+                    },
+                    ],
+            };
+            lineChart.setOption(lineOption);
+        </script>
+
     </body>
 </html>
