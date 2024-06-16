@@ -278,11 +278,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="container mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="container mx-auto mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-white p-6 rounded-lg shadow-md">
 
                         <div class="bg-white  rounded-lg ">
-                            <div id="productChart" class="h-80 "></div>
+                            <div id="productChart" class="h-80 sm:h-64 md:h-96 lg:h-112 xl:h-128 "></div>
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
@@ -361,7 +361,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <div class="bg-white rounded-lg ">
-                            <div id="lineChart" class="h-80"></div>
+                            <div id="lineChart" class="h-80 sm:h-64 md:h-96 lg:h-112 xl:h-128"></div>
                         </div>     
                     </div>
                 </div>  
