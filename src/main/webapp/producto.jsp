@@ -21,7 +21,40 @@
         <link rel='stylesheet'
               href='https://cdn-uicons.flaticon.com/2.4.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+                                .slider-wrapper {
+                                    overflow: hidden;
+                                    position: relative;
+                                    width: 80%; /* Adjust as needed */
+                                    margin: 0 auto;
+                                }
+                                .slider {
+                                    display: flex;
+                                    transition: transform 0.3s ease-in-out;
+                                }
+                                .slider-item {
+                                    flex: 0 0 25%;
+                                    box-sizing: border-box;
+                                    margin-right: 16px;
+                                }
 
+
+                                @media (max-width: 1024px) {
+                                    .slider-item {
+                                        flex: 0 0 33.3333%;
+                                    }
+                                }
+                                @media (max-width: 768px) {
+                                    .slider-item {
+                                        flex: 0 0 50%;
+                                    }
+                                }
+                                @media (max-width: 640px) {
+                                    .slider-item {
+                                        flex: 0 0 100%;
+                                    }
+                                }
+                            </style>
     </head>
     <%
             // Obtener la ID de sesión desde la cookie
@@ -375,6 +408,79 @@
                 if (connProductos2 != null) try { connProductos2.close(); } catch (SQLException ignore) {}
             }
         %>
+        <h1 class="text-3xl font-bold text-center mt-8">Productos que te puede interesar</h1>
+                                    <div class="bg-yellow-500 h-1 w-36 mx-auto rounded-full border border-yellow-500 mt-2"></div>
+                                    <div class="slider-wrapper mt-8 mb-8">
+                                        <div id="slider" class="slider">
+                                            <%
+                                                Connection conexion = null;
+                                                PreparedStatement pstmt1 = null;
+                                                ResultSet rs1 = null;
+                                                try {
+                                                    // Crear una instancia de la clase Mantenimiento para manejar la conexión a la base de datos
+                                                    Mantenimiento mantenimiento1 = new Mantenimiento();
+                                                    mantenimiento1.conectarBD();
+                                                    conexion = mantenimiento1.getConexion();
+
+                                                    // Consulta SQL para obtener todos los productos
+                                                    String consulta1 = "SELECT P.id_producto, P.descripcion, P.precio, P.cantidad, P.url_imagen, M.id_marca, M.nombre_marca FROM Productos AS P JOIN Marca AS M ON P.marca_id = M.id_marca;";
+                                                    pstmt1 = conexion.prepareStatement(consulta1);
+                                                    rs1 = pstmt1.executeQuery();
+
+                                                    // Procesar los resultados
+                                                    boolean hayProductos = false; // Variable para verificar si hay productos
+                                                    while (rs1.next()) {
+                                                        hayProductos = true; // Se encontraron productos
+                                                        int id_Producto = rs1.getInt("id_producto");
+                                                        String marca = rs1.getString("nombre_marca");
+                                                        String descripcion = rs1.getString("descripcion");
+                                                        String precio = rs1.getString("precio");
+                                                        int cantidad = rs1.getInt("cantidad");
+                                                        String urlImagen = rs1.getString("url_imagen");
+                                            %>
+
+                                            <div class="slider-item  p-4 rounded-lg shadow-md text-center">
+                                                <a href="producto.jsp?id_producto=<%= id_Producto %>">
+                                                    <img src="${pageContext.request.contextPath}<%= urlImagen %>" alt="<%= marca  %>" class="transition duration-300 transform hover:scale-105 hover:shadow-yellow-400">
+                                                </a>
+                                                <div class="mt-2">
+                                                    <h2 class="text-lg font-bold"><%= descripcion %></h2>
+                                                    <p class=" text-xl stat-value text-yellow-500">S/<%= precio %></p>
+                                                </div>
+
+                                                <a href="producto.jsp?id_producto=<%= id_Producto %>" class="btn  btn-warning btn-sm text-white mt-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white w-max rounded-full "><i class="fi fi-rr-shopping-cart"></i>Comprar </a>
+                                            </div>
+
+
+                                            <%
+                                                    }
+                                                    if (!hayProductos) {
+                                            %>
+                                            <p>No hay productos disponibles.</p>
+                                            <%
+                                                    }
+                                                } catch (Exception e) {
+                                                    out.println("Error al conectar a la base de datos: " + e.getMessage());
+                                                } finally {
+                                                    // Cerrar la conexión utilizando el método de la clase Mantenimiento
+                                                    try {
+                                                        if (rs1 != null) rs1.close();
+                                                        if (pstmt1 != null) pstmt1.close();
+                                                        if (conexion != null) conexion.close();
+                                                    } catch (SQLException e) {
+                                                        out.println("Error al cerrar la conexión: " + e.getMessage());
+                                                    }
+                                                }
+                                            %>
+                                        </div>
+                                        <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
+                                            &#10094;
+                                        </button>
+                                        <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
+                                            &#10095;
+                                        </button>
+                                    </div>
+        
         <% String mensaje = request.getParameter("mensaje"); %>
         <% if (mensaje != null && !mensaje.isEmpty()) { %>
         <% if (mensaje.equals("insuficiente")) { %>
@@ -600,5 +706,6 @@
 <script src="js/ModalSesion.js"></script>
         <script src="js/ValidacionSesion.js"></script>
 <script src="js/navbar.js"></script>
+<script src="js/slider.js"></script>
 </body>
 </html>
