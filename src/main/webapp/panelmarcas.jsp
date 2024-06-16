@@ -69,7 +69,7 @@
                 <div class="flex justify-center mt-8">
                     <img src="img/ace.png" class="w-44 object-contain" />
                 </div>
-                <ul class="mt-10 space-y-3">
+                <ul class="mt-10 space-y-3 overflow-x-auto">
                     <li onclick="window.location.href = 'indexpanel.jsp'" 
                         class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10 text-gray-600 hover:bg-orange-400 hover:text-white ">
                         <span>
@@ -124,7 +124,7 @@
                         <button class="btn btn-success text-white" onclick="my_modal_3.showModal()"> <i
                                 class="fi fi-rs-plus"></i> Agregar</button>
                          <label class="input input-bordered flex items-center gap-2">
-                            <input type="text" id="searchInput" class="grow" placeholder="Buscar por ID o Nombre" onkeyup="filterTable()" />
+                            <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
                             <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
                             </svg>
@@ -283,30 +283,25 @@
                 </div>
             </div>
             <script src="js/sidebar.js"></script>  
-            <script>
-                                                        function filterTable() {
-                                                            var input, filter, table, tr, td, i, txtValue;
-                                                            input = document.getElementById("searchInput");
-                                                            filter = input.value.toUpperCase();
-                                                            table = document.querySelector(".table");
-                                                            tr = table.getElementsByTagName("tr");
+         <script>
+function filterTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.querySelector(".table");
+    tr = table.getElementsByTagName("tr");
 
-                                                            for (i = 1; i < tr.length; i++) {
-                                                                tr[i].style.display = "none";
-                                                                td = tr[i].getElementsByTagName("td");
-                                                                if (td) {
-                                                                    for (var j = 0; j < 2; j++) {
-                                                                        if (td[j]) {
-                                                                            txtValue = td[j].textContent || td[j].innerText;
-                                                                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                                                                tr[i].style.display = "";
-                                                                                break;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-            </script>
+    for (i = 1; i < tr.length; i++) {
+        tr[i].style.display = "none"; // Ocultar la fila inicialmente
+        td = tr[i].getElementsByTagName("td")[1]; // Seleccionar solo la tercera columna (índice 2)
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
+            }
+        }
+    }
+}
+</script>
     </body>
 </html>

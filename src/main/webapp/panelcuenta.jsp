@@ -67,7 +67,7 @@
                 <div class="flex justify-center mt-8">
                     <img src="img/ace.png" class="w-44 object-contain" />
                 </div>
-                <ul class="mt-10 space-y-3">
+                <ul class="mt-10 space-y-3 overflow-x-auto">
                     <li onclick="window.location.href = 'indexpanel.jsp'" 
                         class="relative flex cursor-pointer space-x-2 rounded-md py-4 px-10 text-gray-600 hover:bg-orange-400 hover:text-white ">
                         <span>
