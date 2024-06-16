@@ -16,6 +16,10 @@
         <servlet-name>ReporteVentas</servlet-name>
         <servlet-class>ReporteVentas</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ConsultaRUC</servlet-name>
+        <servlet-class>ConsultaRUC</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AgregarProducto</servlet-name>
         <url-pattern>/AgregarProducto</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ReporteVentas</servlet-name>
         <url-pattern>/ReporteVentas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConsultaRUC</servlet-name>
+        <url-pattern>/ConsultaRUC</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

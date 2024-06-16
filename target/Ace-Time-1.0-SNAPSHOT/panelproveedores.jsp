@@ -11,6 +11,7 @@
         response.sendRedirect("index.jsp");
         return;
     }
+    
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +28,32 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <script>
+            function consultarRUC() {
+                var ruc = document.getElementById("ruc_proveedor").value;
+
+                // Crear el cuerpo de la solicitud
+                var requestBody = {
+                    rucInput: ruc
+                };
+
+                fetch('ConsultaRUC', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById("nombre_proveedor").value = data.nombreEmpresa;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById("nombre_proveedor").value = "ERROR";
+                        });
+            }
+        </script>
     </head>
     <body class="overflow-x-hidden">
         <div class="min-h-screen w-screen bg-gray-100">
@@ -138,25 +165,41 @@
                                 </form>
                                 <div class="p-8 rounded-lg  max-w-md w-full">
                                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Agregar Nuevo Proveedor</h2>
-                                    <form action="agregarproveedor.jsp">
-                                        <div class="mb-4">
-                                            <label for="nombre_proveedor" class="block text-gray-700 mb-2">Nombre del Proveedor</label>
+                                    <form action="agregarproveedor.jsp" method="post" class="space-y-4 p-4 rounded-lg">
+                                        <div class="form-control">
+                                            <label for="nombre_proveedor" class="label">
+                                                <span class="label-text">Nombre del Proveedor</span>
+                                            </label>
                                             <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="input input-bordered w-full" placeholder="Nombre del proveedor" required>
                                         </div>
-                                        <div class="mb-4">
-                                            <label for="telefono_proveedor" class="block text-gray-700 mb-2">Teléfono</label>
+
+                                        <div class="form-control">
+                                            <label for="telefono_proveedor" class="label">
+                                                <span class="label-text">Teléfono</span>
+                                            </label>
                                             <input type="tel" id="telefono_proveedor" name="telefono_proveedor" class="input input-bordered w-full" placeholder="Teléfono del proveedor" maxlength="9" pattern="[0-9]{9}">
                                         </div>
-                                        <div class="mb-4">
-                                            <label for="correo_proveedor" class="block text-gray-700 mb-2">Correo Electrónico</label>
+
+                                        <div class="form-control">
+                                            <label for="correo_proveedor" class="label">
+                                                <span class="label-text">Correo Electrónico</span>
+                                            </label>
                                             <input type="email" id="correo_proveedor" name="correo_proveedor" class="input input-bordered w-full" placeholder="Correo electrónico del proveedor">
                                         </div>
-                                        <div class="mb-4">
-                                            <label for="ruc_proveedor" class="block text-gray-700 mb-2">RUC</label>
-                                            <input type="text" id="ruc_proveedor" name="ruc_proveedor" class="input input-bordered w-full" placeholder="RUC del proveedor" maxlength="11" pattern="[0-9]{11}">
+
+                                        <div class="form-control">
+                                            <label for="ruc_proveedor" class="label">
+                                                <span class="label-text">RUC</span>
+                                            </label>
+                                            <div class="relative form-control">
+                                                <input type="text" id="ruc_proveedor" name="ruc_proveedor" class="input input-bordered w-full pr-20" placeholder="Número de RUC" maxlength="11" required>
+                                                <button type="button" onclick="consultarRUC()" class="absolute inset-y-0 right-0 px-4 text-white bg-green-500 hover:bg-green-600 rounded-r-lg flex items-center">Buscar</button>
+                                            </div>
                                         </div>
+
                                         <button type="submit" class="btn btn-success text-white w-full">Añadir Proveedor</button>
                                     </form>
+
                                 </div>
                             </div>
                         </dialog>
@@ -314,24 +357,56 @@
             </div>
             <script src="js/sidebar.js"></script>
             <script>
-function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.querySelector(".table");
-    tr = table.getElementsByTagName("tr");
+                                                        function filterTable() {
+                                                            var input, filter, table, tr, td, i, txtValue;
+                                                            input = document.getElementById("searchInput");
+                                                            filter = input.value.toUpperCase();
+                                                            table = document.querySelector(".table");
+                                                            tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) {
-        tr[i].style.display = "none"; // Ocultar la fila inicialmente
-        td = tr[i].getElementsByTagName("td")[1]; // Seleccionar solo la tercera columna (índice 2)
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
-            }
+                                                            for (i = 1; i < tr.length; i++) {
+                                                                tr[i].style.display = "none"; // Ocultar la fila inicialmente
+                                                                td = tr[i].getElementsByTagName("td")[1]; // Seleccionar solo la tercera columna (índice 2)
+                                                                if (td) {
+                                                                    txtValue = td.textContent || td.innerText;
+                                                                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                                                        tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+            </script>
+<script>
+    function consultarRUC() {
+        var ruc = document.getElementById("ruc_proveedor").value;
+
+        if (!ruc) {
+            alert('Por favor, ingrese un RUC.');
+            return;
         }
+        
+        // Crear el cuerpo de la solicitud
+        var requestBody = {
+            rucInput: ruc
+        };
+
+        fetch('ConsultaRUC', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Llenar el campo 'nombre_proveedor' con el nombre de la empresa
+            document.getElementById("nombre_proveedor").value = data.nombreEmpresa;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("nombre_proveedor").value = "Error al consultar el RUC";
+        });
     }
-}
 </script>
 
     </body>
