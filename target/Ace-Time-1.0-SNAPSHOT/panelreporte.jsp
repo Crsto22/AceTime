@@ -126,7 +126,7 @@ mantenimiento2.cerrarBD();
                     <!-- Tab 1 -->
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Ventas" checked />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 ">
-                        <form id="reporteForm" class="flex justify-center space-x-4">
+                        <form action="ReporteVentas" id="reporteForm" class="flex justify-center space-x-4" target="_blank">
                             <div>
                                 <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
                                 <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
@@ -145,10 +145,10 @@ mantenimiento2.cerrarBD();
                     <!-- Tab 2 -->
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Productos" />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-                        <form action="ReporteProductos" method="GET" class="flex items-center space-x-4">
+                        <form action="ReporteProductos" method="GET" class="flex items-center space-x-4" id="reportForm" target="_blank">
                             <div class="flex items-center space-x-2">
-                                <label for="brand" class="block text-sm font-medium text-gray-700">Marca</label>
-                                <select id="brand" name="brand" class="select select-bordered max-w-xs">
+                                <label for="marca" class="block text-sm font-medium text-gray-700">Marca</label>
+                                <select id="marca" name="marca" class="select select-bordered max-w-xs">
                                     <option value="todos">Todos</option>
                                     <% for (Marca marca : marcas) { %>
                                     <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
@@ -160,9 +160,7 @@ mantenimiento2.cerrarBD();
                     </div>
                 </div>
             </div>
-
-
-
+                                
             <script>
                 const menuBtn = document.getElementById("menu-btn");
                 const sidebar = document.getElementById("sidebar");

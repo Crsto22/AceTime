@@ -12,6 +12,10 @@
         <servlet-name>ReporteProductos</servlet-name>
         <servlet-class>ReporteProductos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReporteVentas</servlet-name>
+        <servlet-class>ReporteVentas</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AgregarProducto</servlet-name>
         <url-pattern>/AgregarProducto</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>ReporteProductos</servlet-name>
         <url-pattern>/ReporteProductos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReporteVentas</servlet-name>
+        <url-pattern>/ReporteVentas</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

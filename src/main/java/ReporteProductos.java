@@ -1,12 +1,7 @@
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.*;
@@ -20,6 +15,10 @@ import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import datos.Mantenimiento; // Asegúrate de importar la clase Mantenimiento aquí
 
 @WebServlet("/GeneratePDF")
 public class ReporteProductos extends HttpServlet {
@@ -31,7 +30,7 @@ public class ReporteProductos extends HttpServlet {
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=output.pdf");
 
-        String brandParam = request.getParameter("brand");
+        String brandParam = request.getParameter("marca");
         int idMarca = -1; // Valor por defecto para obtener todos los productos
 
         // Determinar la id_marca seleccionada
@@ -42,6 +41,10 @@ public class ReporteProductos extends HttpServlet {
                 e.printStackTrace();
             }
         }
+
+        Mantenimiento mantenimiento = new Mantenimiento();
+        mantenimiento.conectarBD();
+        Connection conn = mantenimiento.getConexion();
 
         try (PdfWriter writer = new PdfWriter(response.getOutputStream());
              PdfDocument pdf = new PdfDocument(writer);
@@ -104,10 +107,13 @@ public class ReporteProductos extends HttpServlet {
             table.addHeaderCell(new Cell().add(new Paragraph("CANTIDAD")).setBackgroundColor(headerColor).setFontColor(rowColor));
             table.addHeaderCell(new Cell().add(new Paragraph("PROVEEDOR")).setBackgroundColor(headerColor).setFontColor(rowColor));
 
-            // Conectar a la base de datos y obtener datos filtrados por marca si no se selecciona "todos"
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3308/AceTime", "root", "root");
-                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT pr.id_producto, m.nombre_marca AS marca_producto, pr.descripcion, pr.precio, pr.cantidad, pv.nombre_proveedor FROM Productos pr INNER JOIN Marca m ON pr.marca_id = m.id_marca INNER JOIN Proveedores pv ON pr.proveedor_id = pv.id_proveedor WHERE (? = -1 OR m.id_marca = ?)")) {
+            // Consulta SQL para obtener los productos filtrados por marca si no se selecciona "todos"
+            String sql = "SELECT pr.id_producto, m.nombre_marca AS marca_producto, pr.descripcion, pr.precio, pr.cantidad, pv.nombre_proveedor "
+                       + "FROM Productos pr INNER JOIN Marca m ON pr.marca_id = m.id_marca "
+                       + "INNER JOIN Proveedores pv ON pr.proveedor_id = pv.id_proveedor "
+                       + "WHERE (? = -1 OR m.id_marca = ?)";
 
+            try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                 // Configurar parámetro de la marca
                 preparedStatement.setInt(1, idMarca); // Primer ? para el caso de todos (-1)
                 preparedStatement.setInt(2, idMarca); // Segundo ? para la id_marca específica
@@ -135,6 +141,8 @@ public class ReporteProductos extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.getWriter().println("Error al generar el PDF: " + e.getMessage());
+        } finally {
+            mantenimiento.cerrarBD(); // Cerrar la conexión en el bloque finally
         }
     }
 }

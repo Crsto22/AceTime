@@ -317,7 +317,7 @@
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h2 class="text-lg stat-value mb-4 ">Ãšltimas Ventas</h2>
+                        <h2 class="text-lg stat-value mb-4 ">Últimas Ventas</h2>
                         <div class="overflow-y-auto max-h-96">
                             <ul class="divide-y divide-gray-300">
                                 <%
