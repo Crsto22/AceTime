@@ -93,7 +93,7 @@
                                         <div class="container mx-auto px-0">
                                             <div class="flex items-center justify-between py-4">
                                                 <div class="flex items-center ml-2 ">
-                                                    <a href="#" class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
+                                                    <a href="index.jsp" class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
                                                         <img src="./img/ace.png" alt="Logo" class="w-24 h-auto" />
                                                     </a>
                                                     <div class="hidden sm:flex sm:items-start ml-8"></div>
@@ -195,8 +195,16 @@
                                                         }
                                                     %>
                                                 </div>
-                                                <div class="sm:hidden cursor-pointer" id="mobileMenuButton">
-                                                    <i class="fi fi-rr-menu-burger text-4xl mx-6"></i>
+                                                <div class="sm:hidden cursor-pointer" >
+                                                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle " onclick="window.location.href = 'carito.jsp';">
+                                                        <div class="indicator">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                            </svg>
+                                                            <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos%></span>
+                                                        </div>
+                                                    </div>
+                                                    <i id="mobileMenuButton" class="fi fi-rr-menu-burger text-4xl mx-6"></i>
                                                 </div>
                                             </div>
                                             <div class="sm:hidden bg-white border-t-2 py-2 hidden " id="mobileMenu">
@@ -275,83 +283,83 @@
                                                     </dialog>
 
                                                     <!-- Segundo modal -->
-                                                    <dialog id="my_modal_2" class="modal">
-                                                        <div class="modal-box">
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                    </svg>
-                                                                </button>
-                                                            </form>
-                                                            <div class="text-center">
-                                                                <h2 class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
-                                                            </div>
-                                                            <form class="mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
-                                                                <div>
-                                                                    <label for="nombreUsuario" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
-                                                                    <input id="nombreUsuario" name="nombreUsuario" type="text" required
-                                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                           placeholder="Ingrese el nombre de usuario">
-                                                                        <span id="errorNombreUsuario" class="text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
-                                                                </div>
-                                                                <div>
-                                                                    <label for="correo" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                                                                    <input id="correo" name="correo" type="email" required
-                                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                           placeholder="Ingrese su correo electrónico">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                                                                    <input id="password" name="password" type="password" required
-                                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                           placeholder="Ingrese su contraseña">
-                                                                </div>
-                                                                <div class="grid grid-cols-2 gap-4">
-                                                                    <div>
-                                                                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                                                        <input id="nombre" name="nombre" type="text" required
-                                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                               placeholder="Ingrese su nombre">
+                                                     <dialog id="my_modal_2" class="modal">
+                                                                <div class="modal-box">
+                                                                    <form method="dialog">
+                                                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    </form>
+                                                                    <div class="text-center">
+                                                                        <h2 class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
-                                                                        <input id="apellido" name="apellido" type="text" required
-                                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                               placeholder="Ingrese su apellido">
-                                                                    </div>
+                                                                    <form class="registroForm mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
+                                                                        <div>
+                                                                            <label for="nombreUsuario1" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+                                                                            <input id="nombreUsuario1" name="nombreUsuario" type="text" required
+                                                                                   class="nombreUsuario mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                   placeholder="Ingrese el nombre de usuario">
+                                                                                <span class="errorNombreUsuario text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="correo1" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                                                                            <input id="correo1" name="correo" type="email" required
+                                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                   placeholder="Ingrese su correo electrónico">
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="password1" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                                                            <input id="password1" name="password" type="password" required
+                                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                   placeholder="Ingrese su contraseña">
+                                                                        </div>
+                                                                        <div class="grid grid-cols-2 gap-4">
+                                                                            <div>
+                                                                                <label for="nombre1" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                                                                <input id="nombre1" name="nombre" type="text" required
+                                                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                       placeholder="Ingrese su nombre">
+                                                                            </div>
+                                                                            <div>
+                                                                                <label for="apellido1" class="block text-sm font-medium text-gray-700">Apellido</label>
+                                                                                <input id="apellido1" name="apellido" type="text" required
+                                                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                       placeholder="Ingrese su apellido">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="grid grid-cols-2 gap-4">
+                                                                            <div>
+                                                                                <label for="tipo_documento1" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
+                                                                                <select id="tipo_documento1" name="tipo_documento" required
+                                                                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+                                                                                    <option value="1">DNI</option>
+                                                                                    <option value="2">Pasaporte</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label for="numeroDocumento1" class="block text-sm font-medium text-gray-700">Número Documento</label>
+                                                                                <input id="numeroDocumento1" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
+                                                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                       placeholder="Ingrese su número de documento">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label for="telefono1" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                                                            <input id="telefono1" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
+                                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                                   placeholder="Ingrese su teléfono">
+                                                                        </div>
+                                                                        <div>
+                                                                            <button type="submit"
+                                                                                    class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
+                                                                                Crear Cuenta
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
-                                                                <div class="grid grid-cols-2 gap-4">
-                                                                    <div>
-                                                                        <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
-                                                                        <select id="tipo_documento" name="tipo_documento" required
-                                                                                class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-                                                                            <option value="1">DNI</option>
-                                                                            <option value="2">Pasaporte</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="numeroDocumento" class="block text-sm font-medium text-gray-700">Número Documento</label>
-                                                                        <input id="numeroDocumento" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
-                                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                               placeholder="Ingrese su número de documento">
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                                                                    <input id="telefono" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
-                                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                                                           placeholder="Ingrese su teléfono">
-                                                                </div>
-                                                                <div>
-                                                                    <button type="submit"
-                                                                            class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
-                                                                        Crear Cuenta
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </dialog>
+                                                            </dialog>
                                                 </div>
                                             </div>
                                         </div>
@@ -583,67 +591,90 @@
                                     </div>
                                 </div>
                             </footer> 
-                            <div id="ActualizarModalContainer" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="registro-modal-title" role="dialog" aria-modal="true">
-                                <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-                                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                                    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full animate__animated animate__fadeInDown">
-                                        <button id="closeActualizarModalButton" class="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                        <div class="text-center">
-                                            <h2 id="registro-modal-title" class="text-3xl font-extrabold text-gray-900">Actualizar Cuenta</h2>
+                             <div id="registroModalContainer" class="fixed inset-0 z-50 hidden overflow-y-auto"
+                                         aria-labelledby="registro-modal-title" role="dialog" aria-modal="true">
+                                        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                                            <div
+                                                class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full animate__animated animate__fadeInDown">
+                                                <button id="closeRegistroModalButton"
+                                                        class="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                                         stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                              d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                                <div class="text-center">
+                                                    <h2 id="registro-modal-title" class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
+                                                </div>
+                                                <form class="registroForm mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
+                                                    <div>
+                                                        <label for="nombreUsuario2" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+                                                        <input id="nombreUsuario2" name="nombreUsuario" type="text" required
+                                                               class="nombreUsuario mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                               placeholder="Ingrese el nombre de usuario">
+                                                            <span class="errorNombreUsuario text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
+                                                    </div>
+                                                    <div>
+                                                        <label for="correo2" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                                                        <input id="correo2" name="correo" type="email" required
+                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                               placeholder="Ingrese su correo electrónico">
+                                                    </div>
+                                                    <div>
+                                                        <label for="password2" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                                        <input id="password2" name="password" type="password" required
+                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                               placeholder="Ingrese su contraseña">
+                                                    </div>
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label for="nombre2" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                                            <input id="nombre2" name="nombre" type="text" required
+                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                   placeholder="Ingrese su nombre">
+                                                        </div>
+                                                        <div>
+                                                            <label for="apellido2" class="block text-sm font-medium text-gray-700">Apellido</label>
+                                                            <input id="apellido2" name="apellido" type="text" required
+                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                   placeholder="Ingrese su apellido">
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label for="tipo_documento2" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
+                                                            <select id="tipo_documento2" name="tipo_documento" required
+                                                                    class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+                                                                <option value="1">DNI</option>
+                                                                <option value="2">Pasaporte</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label for="numeroDocumento2" class="block text-sm font-medium text-gray-700">Número Documento</label>
+                                                            <input id="numeroDocumento2" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
+                                                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                                   placeholder="Ingrese su número de documento">
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label for="telefono2" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                                        <input id="telefono2" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
+                                                               class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                               placeholder="Ingrese su teléfono">
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit"
+                                                                class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
+                                                            Crear Cuenta
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <form id="registroForm" class="mt-8 space-y-6" action="procesarActualizarUsuario.jsp" method="POST">
-                                            <div>
-                                                <label for="nombreUsuario" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
-                                                <input id="nombreUsuario" name="nombreUsuario" type="text" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese el nombre de usuario">
-                                                    <span id="errorNombreUsuario" class="text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                                    <input id="nombre" name="nombre" type="text" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su nombre">
-                                                </div>
-                                                <div>
-                                                    <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
-                                                    <input id="apellido" name="apellido" type="text" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su apellido">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
-                                                <input id="correo" name="correo" type="email" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su correo">
-                                            </div>
-                                            <div>
-                                                <label for="contrasena" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                                                <input id="contrasena" name="contrasena" type="password" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su contraseña">
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <label for="tipoDocumento" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
-                                                    <select id="tipoDocumento" name="tipoDocumento" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-                                                        <option value="1">DNI</option>
-                                                        <option value="2">Pasaporte</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label for="numeroDocumento" class="block text-sm font-medium text-gray-700">Numero documento</label>
-                                                    <input id="numeroDocumento" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su número de documento">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                                                <input id="telefono" name="telefono" type="tel" pattern="^[0-9]{9}$" maxlength="9" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Ingrese su teléfono">
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">Actualizar</button>
-                                            </div>
-                                        </form>
                                     </div>
-                                </div>
-                            </div>
                             <% if (request.getParameter("success") != null) { %>
 
                             <div id="alerta" class="fixed top-24 right-4 transform z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 animate__animated animate__bounceInRight" role="alert">

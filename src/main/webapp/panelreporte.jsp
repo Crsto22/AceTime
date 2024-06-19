@@ -127,23 +127,23 @@
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Ventas" checked />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 ">
                         <form action="ReporteVentas" id="reporteForm" class="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-4" target="_blank">
-    <div>
-        <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-        <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
-    </div>
-    <div>
-        <label for="fecha-fin" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
-        <input type="text" id="fecha-fin" name="fecha-fin" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
-    </div>
-    <div>
-        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre (Opcional)</label>
-        <input type="text" id="nombre" name="nombre" class="input input-bordered w-full max-w-xs mt-1" />
-    </div>
-    <div>
-        <label for="fecha-fin" class="block text-sm font-medium text-gray-700 lg:mt-6"></label>
-        <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600 self-end lg:self-center">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
-    </div>
-</form>
+                            <div>
+                                <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+                                <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
+                            </div>
+                            <div>
+                                <label for="fecha-fin" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
+                                <input type="text" id="fecha-fin" name="fecha-fin" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
+                            </div>
+                            <div>
+                                <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre (Opcional)</label>
+                                <input type="text" id="nombre" name="nombre" class="input input-bordered w-full max-w-xs mt-1" />
+                            </div>
+                            <div>
+                                <label for="fecha-fin" class="block text-sm font-medium text-gray-700 lg:mt-6"></label>
+                                <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600 self-end lg:self-center">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
+                            </div>
+                        </form>
 
 
                         <div id="toastContainer" class="fixed top-24 right-4 md:top-22 md:right-6 lg:top-24 lg:right-8 h-auto w-11/12 md:w-2/3 lg:w-1/2 max-w-sm mx-auto"></div>

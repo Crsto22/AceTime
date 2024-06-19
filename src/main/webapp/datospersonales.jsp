@@ -72,7 +72,7 @@
                         <div class="flex items-center justify-between py-4">
                             <!-- Imagen de logo -->
                             <div class="flex items-center ml-2">
-                                <a href="#" class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
+                                <a href="index.jsp"class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
                                     <img src="./img/ace.png" alt="Logo" class="w-24 h-auto" />
                                 </a>
                                 <div class="hidden sm:flex sm:items-start ml-8"></div>

@@ -16,7 +16,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Producto </title>
-       <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -24,101 +24,105 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
-   <style>
-                                .slider-wrapper {
-                                    overflow: hidden;
-                                    position: relative;
-                                    width: 80%; /* Adjust as needed */
-                                    margin: 0 auto;
-                                }
-                                .slider {
-                                    display: flex;
-                                    transition: transform 0.3s ease-in-out;
-                                }
-                                .slider-item {
-                                    flex: 0 0 25%;
-                                    box-sizing: border-box;
-                                    margin-right: 16px;
-                                }
+        <style>
+            .slider-wrapper {
+                overflow: hidden;
+                position: relative;
+                width: 80%; /* Adjust as needed */
+                margin: 0 auto;
+            }
+            .slider {
+                display: flex;
+                transition: transform 0.3s ease-in-out;
+            }
+            .slider-item {
+                flex: 0 0 25%;
+                box-sizing: border-box;
+                margin-right: 16px;
+            }
 
 
-                                @media (max-width: 1024px) {
-                                    .slider-item {
-                                        flex: 0 0 33.3333%;
-                                    }
-                                }
-                                @media (max-width: 768px) {
-                                    .slider-item {
-                                        flex: 0 0 50%;
-                                    }
-                                }
-                                @media (max-width: 640px) {
-                                    .slider-item {
-                                        flex: 0 0 100%;
-                                    }
-                                }
-                            </style>
+            @media (max-width: 1024px) {
+                .slider-item {
+                    flex: 0 0 33.3333%;
+                }
+            }
+            @media (max-width: 768px) {
+                .slider-item {
+                    flex: 0 0 50%;
+                }
+            }
+            @media (max-width: 640px) {
+                .slider-item {
+                    flex: 0 0 100%;
+                }
+            }
+        </style>
     </head>
     <%
-            // Obtener la ID de sesión desde la cookie
-            String sesion_id = null;
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("sesion_id".equals(cookie.getName())) {
-                        sesion_id = cookie.getValue();
-                        break;
-                    }
+        // Obtener la ID de sesión desde la cookie
+        String sesion_id = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("sesion_id".equals(cookie.getName())) {
+                    sesion_id = cookie.getValue();
+                    break;
                 }
             }
+        }
 
-            // Si no se encuentra la ID de sesión en la cookie, generamos una nueva
-            if (sesion_id == null || sesion_id.isEmpty()) {
-                sesion_id = UUID.randomUUID().toString(); // Generar una nueva ID de sesión
-                Cookie cookie = new Cookie("sesion_id", sesion_id);
-                response.addCookie(cookie);
+        // Si no se encuentra la ID de sesión en la cookie, generamos una nueva
+        if (sesion_id == null || sesion_id.isEmpty()) {
+            sesion_id = UUID.randomUUID().toString(); // Generar una nueva ID de sesión
+            Cookie cookie = new Cookie("sesion_id", sesion_id);
+            response.addCookie(cookie);
+        }
+
+        // Obtener el idUsuario de la sesión
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+        // Realizar la consulta SQL
+        int totalProductos = 0;
+        int CostoTotal = 0;
+        Mantenimiento mantenimiento = new Mantenimiento();
+        mantenimiento.conectarBD();
+        Connection conn = mantenimiento.getConexion();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            if (idUsuario != null) {
+                // Si hay un idUsuario en la sesión, usarlo para la consulta
+                stmt = conn.prepareStatement("SELECT SUM(precio * cantidad) AS costo_total, SUM(cantidad) AS total_productos FROM carrito WHERE id_usuario = ?");
+                stmt.setInt(1, idUsuario);
+            } else {
+                // Si no hay idUsuario en la sesión, usar sesion_id para la consulta
+                stmt = conn.prepareStatement("SELECT SUM(precio * cantidad) AS costo_total, SUM(cantidad) AS total_productos FROM carrito WHERE sesion_id = ?");
+                stmt.setString(1, sesion_id);
             }
 
-            // Obtener el idUsuario de la sesión
-            Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-
-            // Realizar la consulta SQL
-            int totalProductos = 0;
-            int CostoTotal = 0;
-            Mantenimiento mantenimiento = new Mantenimiento();
-            mantenimiento.conectarBD();
-            Connection conn = mantenimiento.getConexion();
-
-            PreparedStatement stmt = null;
-            ResultSet rs = null;
-
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalProductos = rs.getInt("total_productos");
+                CostoTotal = rs.getInt("costo_total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                if (idUsuario != null) {
-                    // Si hay un idUsuario en la sesión, usarlo para la consulta
-                    stmt = conn.prepareStatement("SELECT SUM(precio * cantidad) AS costo_total, SUM(cantidad) AS total_productos FROM carrito WHERE id_usuario = ?");
-                    stmt.setInt(1, idUsuario);
-                } else {
-                    // Si no hay idUsuario en la sesión, usar sesion_id para la consulta
-                    stmt = conn.prepareStatement("SELECT SUM(precio * cantidad) AS costo_total, SUM(cantidad) AS total_productos FROM carrito WHERE sesion_id = ?");
-                    stmt.setString(1, sesion_id);
+                if (rs != null) {
+                    rs.close();
                 }
-
-                rs = stmt.executeQuery();
-                if (rs.next()) {
-                    totalProductos = rs.getInt("total_productos");
-                    CostoTotal = rs.getInt("costo_total");
+                if (stmt != null) {
+                    stmt.close();
                 }
+                mantenimiento.cerrarBD();
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (rs != null) rs.close();
-                    if (stmt != null) stmt.close();
-                    mantenimiento.cerrarBD();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+        }
     %>
     <body>
         <nav class="bg-gray-100 fixed top-0 left-0 w-full z-50">
@@ -127,7 +131,7 @@
                     <div class="container mx-auto px-0">
                         <div class="flex items-center justify-between py-4">
                             <div class="flex items-center ml-2 ">
-                                <a href="#" class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
+                                <a href="index.jsp" class="flex items-center py-0 px-0 text-gray-700 hover:text-gray-900">
                                     <img src="./img/ace.png" alt="Logo" class="w-24 h-auto" />
                                 </a>
                                 <div class="hidden sm:flex sm:items-start ml-8"></div>
@@ -143,13 +147,13 @@
                                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                                         <div class="indicator">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                                            <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos %></span>
+                                            <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos%></span>
                                         </div>
                                     </div>
                                     <div tabindex="0" class="mt-3 z-50 card card-compact dropdown-content w-52 bg-base-100 shadow">
                                         <div class="card-body">
-                                            <span class="font-bold text-lg"><%= totalProductos %> Productos</span>
-                                            <span class="text-yellow-600">Subtotal: S/ <%= CostoTotal %></span>
+                                            <span class="font-bold text-lg"><%= totalProductos%> Productos</span>
+                                            <span class="text-yellow-600">Subtotal: S/ <%= CostoTotal%></span>
                                             <div class="card-actions">
                                                 <button class="btn btn-sm btn-warning btn-block text-white" onclick="window.location.href = 'carito.jsp';">Ver Carrito</button>
                                             </div>
@@ -161,17 +165,17 @@
                                     <line x1="12.5" y1="0" x2="12.5" y2="25" stroke="black" stroke-width="2" />
                                     </svg>
                                 </div>
-                                <% 
-                // Verificar si hay una sesión activa
-                HttpSession sesion = request.getSession(false);
-                if (session.getAttribute("nombreUsuario") != null) { 
-                    // Si hay una sesión activada
-                    if ("admin".equals(sesion.getAttribute("rol"))) { 
+                                <%
+                                    // Verificar si hay una sesión activa
+                                    HttpSession sesion = request.getSession(false);
+                                    if (session.getAttribute("nombreUsuario") != null) {
+                                        // Si hay una sesión activada
+                                        if ("admin".equals(sesion.getAttribute("rol"))) {
                                 %>
                                 <div class="dropdown dropdown-end">
                                     <div>
                                         <div class="indicator">
-                                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario") %></span></span>
+                                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario")%></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -186,13 +190,13 @@
                                         <li><a href="cerrarsesion.jsp"> <i class="fi fi-rr-exit"></i> Cerrar Sesion</a></li>
                                     </ul>
                                 </div>
-                                <% 
-                                    } else if ("cliente".equals(sesion.getAttribute("rol"))) {
+                                <%
+                                } else if ("cliente".equals(sesion.getAttribute("rol"))) {
                                 %>
                                 <div class="dropdown dropdown-end">
                                     <div>
                                         <div class="indicator">
-                                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario") %></span></span>
+                                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario")%></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +211,7 @@
                                         <li><a href="cerrarsesion.jsp"> <i class="fi fi-rr-exit"></i> Cerrar Sesion</a></li>
                                     </ul>
                                 </div> 
-                                <% 
+                                <%
                                     }
                                 } else {
                                 %>
@@ -225,12 +229,20 @@
                                         </div>
                                     </div>
                                 </div> 
-                                <% 
-                                }
+                                <%
+                                    }
                                 %>
                             </div>
-                            <div class="sm:hidden cursor-pointer" id="mobileMenuButton">
-                                <i class="fi fi-rr-menu-burger text-4xl mx-6"></i>
+                            <div class="sm:hidden cursor-pointer" >
+                                <div tabindex="0" role="button" class="btn btn-ghost btn-circle " onclick="window.location.href = 'carito.jsp';">
+                                    <div class="indicator">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos%></span>
+                                    </div>
+                                </div>
+                                <i id="mobileMenuButton" class="fi fi-rr-menu-burger text-4xl mx-6"></i>
                             </div>
                         </div>
                         <div class="sm:hidden bg-white border-t-2 py-2 hidden " id="mobileMenu">
@@ -259,15 +271,6 @@
                                 <%
                                     }
                                 %>
-                                <!-- Botón para productos -->
-                                <div tabindex="0" role="button" class="btn btn-ghost btn-circle mx-5" onclick="window.location.href = 'carito.jsp';">
-                                    <div class="indicator">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                        <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos%></span>
-                                    </div>
-                                </div>
 
                                 <!-- Primer modal -->
                                 <dialog id="my_modal_3" class="modal">
@@ -321,59 +324,59 @@
                                         <div class="text-center">
                                             <h2 class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
                                         </div>
-                                        <form class="mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
+                                        <form class="registroForm mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
                                             <div>
-                                                <label for="nombreUsuario" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
-                                                <input id="nombreUsuario" name="nombreUsuario" type="text" required
-                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                <label for="nombreUsuario1" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+                                                <input id="nombreUsuario1" name="nombreUsuario" type="text" required
+                                                       class="nombreUsuario mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                        placeholder="Ingrese el nombre de usuario">
-                                                <span id="errorNombreUsuario" class="text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
+                                                <span class="errorNombreUsuario text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
                                             </div>
                                             <div>
-                                                <label for="correo" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                                                <input id="correo" name="correo" type="email" required
+                                                <label for="correo1" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                                                <input id="correo1" name="correo" type="email" required
                                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                        placeholder="Ingrese su correo electrónico">
                                             </div>
                                             <div>
-                                                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                                                <input id="password" name="password" type="password" required
+                                                <label for="password1" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                                <input id="password1" name="password" type="password" required
                                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                        placeholder="Ingrese su contraseña">
                                             </div>
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                                    <input id="nombre" name="nombre" type="text" required
+                                                    <label for="nombre1" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                                    <input id="nombre1" name="nombre" type="text" required
                                                            class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                            placeholder="Ingrese su nombre">
                                                 </div>
                                                 <div>
-                                                    <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
-                                                    <input id="apellido" name="apellido" type="text" required
+                                                    <label for="apellido1" class="block text-sm font-medium text-gray-700">Apellido</label>
+                                                    <input id="apellido1" name="apellido" type="text" required
                                                            class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                            placeholder="Ingrese su apellido">
                                                 </div>
                                             </div>
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
-                                                    <select id="tipo_documento" name="tipo_documento" required
+                                                    <label for="tipo_documento1" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
+                                                    <select id="tipo_documento1" name="tipo_documento" required
                                                             class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
                                                         <option value="1">DNI</option>
                                                         <option value="2">Pasaporte</option>
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label for="numeroDocumento" class="block text-sm font-medium text-gray-700">Número Documento</label>
-                                                    <input id="numeroDocumento" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
+                                                    <label for="numeroDocumento1" class="block text-sm font-medium text-gray-700">Número Documento</label>
+                                                    <input id="numeroDocumento1" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
                                                            class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                            placeholder="Ingrese su número de documento">
                                                 </div>
                                             </div>
                                             <div>
-                                                <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                                                <input id="telefono" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
+                                                <label for="telefono1" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                                <input id="telefono1" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
                                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                        placeholder="Ingrese su teléfono">
                                             </div>
@@ -394,9 +397,8 @@
         </nav>
 
         <%
-    
             String idProducto = request.getParameter("id_producto");
-    
+
             Connection connProductos2 = null;
             PreparedStatement stmtProducto2 = null;
             ResultSet rsProducto2 = null;
@@ -413,29 +415,29 @@
                 rsProducto2 = stmtProducto2.executeQuery();
 
                 if (rsProducto2.next()) {
-                 String marcaProducto = rsProducto2.getString("nombre_marca");
-                  int cantidadStock = rsProducto2.getInt("cantidad");
+                    String marcaProducto = rsProducto2.getString("nombre_marca");
+                    int cantidadStock = rsProducto2.getInt("cantidad");
         %>
         <div class="max-w-7xl mx-auto p-6 mt-10">
             <div class="bg-white rounded-lg shadow-lg overflow-hidden md:flex">
                 <div class="md:w-1/2 p-4 flex flex-col">
                     <div class="inline-block p-1 overflow-hidden transition-transform duration-500 transform-gpu hover:scale-110">
                         <img class="rounded-lg"
-                             src="${pageContext.request.contextPath}<%= rsProducto2.getString("url_imagen") %>"
-                             alt="<%= rsProducto2.getString("nombre_marca") %>">
+                             src="${pageContext.request.contextPath}<%= rsProducto2.getString("url_imagen")%>"
+                             alt="<%= rsProducto2.getString("nombre_marca")%>">
                     </div>
                     <div class="flex mt-4 space-x-4">
                         <div class="border-2 inline-block p-1 cursor-pointer">
                             <img class="w-20 h-20 rounded-lg"
-                                 src="${pageContext.request.contextPath}<%= rsProducto2.getString("url_imagen") %>"
+                                 src="${pageContext.request.contextPath}<%= rsProducto2.getString("url_imagen")%>"
                                  alt="Thumbnail 1">
                         </div>
                     </div>
                 </div>
                 <div class="md:w-1/2 p-6">
                     <h2 class="md:mt-20"></h2>
-                    <h2 class="text-2xl font-extrabold text-gray-900"><%= marcaProducto %></h2>
-                    <h3 class="text-xl font-semibold text-gray-700"><%= rsProducto2.getString("descripcion") %></h3>
+                    <h2 class="text-2xl font-extrabold text-gray-900"><%= marcaProducto%></h2>
+                    <h3 class="text-xl font-semibold text-gray-700"><%= rsProducto2.getString("descripcion")%></h3>
                     <div class="rating mt-2">
                         <input type="radio" name="rating-22" class="mask mask-star-2 bg-yellow-400" />
                         <input type="radio" name="rating-22" class="mask mask-star-2 bg-yellow-400" />
@@ -449,22 +451,21 @@
                             <span class="text-red-500">Precio Online</span>
                         </div>
                         <div class="flex items-baseline space-x-2">
-                            <span class="text-2xl font-bold">S/ <%= rsProducto2.getString("precio") %></span>
+                            <span class="text-2xl font-bold">S/ <%= rsProducto2.getString("precio")%></span>
                         </div>
                     </div>
                     <div class="border-b border-gray-200 my-4"></div>
                     <%
-   
 
-    if (marcaProducto.equals("CASIO")) {
+                        if (marcaProducto.equals("CASIO")) {
                     %>
                     <p class="text-gray-500 text-sm mt-4">Comprar un reloj Casio es optar por durabilidad y funcionalidad. Con su reputación de precisión y resistencia, un reloj Casio ofrece confiabilidad en su rendimiento a largo plazo, combinado con un diseño clásico o deportivo según tus preferencias.</p>
                     <%
-                        } else if (marcaProducto.equals("FOSSIL")) {
+                    } else if (marcaProducto.equals("FOSSIL")) {
                     %>
                     <p class="text-gray-500 text-sm mt-4">Adquirir un reloj Fossil es elegir estilo y sofisticación. Con una estética moderna y detalles refinados, un reloj Fossil añade un toque de elegancia a tu estilo diario. Además de su aspecto atractivo, la marca también ofrece una calidad confiable y una variedad de funciones útiles para satisfacer tus necesidades cotidianas.</p>
                     <%
-                        } else if (marcaProducto.equals("GUESS")) {
+                    } else if (marcaProducto.equals("GUESS")) {
                     %>
                     <p class="text-gray-500 text-sm mt-4">Comprar un reloj Guess es hacer una declaración de estilo. Con su fusión de elegancia y modernidad, estos relojes son el complemento perfecto para cualquier ocasión, añadiendo un toque de glamour y distinción a tu look diario.</p>
                     <%
@@ -474,7 +475,7 @@
 
                     <div class="mt-6">
                         <form action="enviocarito.jsp" method="post">
-                            <input type="hidden" name="id_producto" value="<%= idProducto %>">
+                            <input type="hidden" name="id_producto" value="<%= idProducto%>">
                             <input type="hidden" name="PagProducto" value="true">
                             <div class="flex items-center space-x-2">
                                 <input type="number" name="cantidad" min="1" value="1"
@@ -487,7 +488,7 @@
                     </div>
                     <div class="border-b border-gray-200 my-4"></div>
                     <%
-                    if (cantidadStock <= 3) {
+                        if (cantidadStock <= 3) {
                     %>
                     <div class="mt-6">
                         <h3 class="flex items-center text-red-500"><i class="fi fi-sr-triangle-warning mr-2 text-lg"></i><span class="text-gray-600">Pocas unidades en stock</span></h3>
@@ -509,7 +510,7 @@
             </div>
         </div>
         <%
-                } else {
+        } else {
         %>
         <div class="max-w-7xl mx-auto p-6 mt-40 mb-40">
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -525,84 +526,99 @@
                 e.printStackTrace();
             } finally {
                 // Cerrar recursos en el bloque finally
-                if (rsProducto2 != null) try { rsProducto2.close(); } catch (SQLException ignore) {}
-                if (stmtProducto2 != null) try { stmtProducto2.close(); } catch (SQLException ignore) {}
-                if (connProductos2 != null) try { connProductos2.close(); } catch (SQLException ignore) {}
+                if (rsProducto2 != null) try {
+                    rsProducto2.close();
+                } catch (SQLException ignore) {
+                }
+                if (stmtProducto2 != null) try {
+                    stmtProducto2.close();
+                } catch (SQLException ignore) {
+                }
+                if (connProductos2 != null) try {
+                    connProductos2.close();
+                } catch (SQLException ignore) {
+                }
             }
         %>
         <h1 class="text-3xl font-bold text-center mt-8">Productos que te puede interesar</h1>
-                                    <div class="bg-yellow-500 h-1 w-36 mx-auto rounded-full border border-yellow-500 mt-2"></div>
-                                    <div class="slider-wrapper mt-8 mb-8">
-                                        <div id="slider" class="slider">
-                                            <%
-                                                Connection conexion = null;
-                                                PreparedStatement pstmt1 = null;
-                                                ResultSet rs1 = null;
-                                                try {
-                                                    // Crear una instancia de la clase Mantenimiento para manejar la conexión a la base de datos
-                                                    Mantenimiento mantenimiento1 = new Mantenimiento();
-                                                    mantenimiento1.conectarBD();
-                                                    conexion = mantenimiento1.getConexion();
+        <div class="bg-yellow-500 h-1 w-36 mx-auto rounded-full border border-yellow-500 mt-2"></div>
+        <div class="slider-wrapper mt-8 mb-8">
+            <div id="slider" class="slider">
+                <%
+                    Connection conexion = null;
+                    PreparedStatement pstmt1 = null;
+                    ResultSet rs1 = null;
+                    try {
+                        // Crear una instancia de la clase Mantenimiento para manejar la conexión a la base de datos
+                        Mantenimiento mantenimiento1 = new Mantenimiento();
+                        mantenimiento1.conectarBD();
+                        conexion = mantenimiento1.getConexion();
 
-                                                    // Consulta SQL para obtener todos los productos
-                                                    String consulta1 = "SELECT P.id_producto, P.descripcion, P.precio, P.cantidad, P.url_imagen, M.id_marca, M.nombre_marca FROM Productos AS P JOIN Marca AS M ON P.marca_id = M.id_marca;";
-                                                    pstmt1 = conexion.prepareStatement(consulta1);
-                                                    rs1 = pstmt1.executeQuery();
+                        // Consulta SQL para obtener todos los productos
+                        String consulta1 = "SELECT P.id_producto, P.descripcion, P.precio, P.cantidad, P.url_imagen, M.id_marca, M.nombre_marca FROM Productos AS P JOIN Marca AS M ON P.marca_id = M.id_marca;";
+                        pstmt1 = conexion.prepareStatement(consulta1);
+                        rs1 = pstmt1.executeQuery();
 
-                                                    // Procesar los resultados
-                                                    boolean hayProductos = false; // Variable para verificar si hay productos
-                                                    while (rs1.next()) {
-                                                        hayProductos = true; // Se encontraron productos
-                                                        int id_Producto = rs1.getInt("id_producto");
-                                                        String marca = rs1.getString("nombre_marca");
-                                                        String descripcion = rs1.getString("descripcion");
-                                                        String precio = rs1.getString("precio");
-                                                        int cantidad = rs1.getInt("cantidad");
-                                                        String urlImagen = rs1.getString("url_imagen");
-                                            %>
+                        // Procesar los resultados
+                        boolean hayProductos = false; // Variable para verificar si hay productos
+                        while (rs1.next()) {
+                            hayProductos = true; // Se encontraron productos
+                            int id_Producto = rs1.getInt("id_producto");
+                            String marca = rs1.getString("nombre_marca");
+                            String descripcion = rs1.getString("descripcion");
+                            String precio = rs1.getString("precio");
+                            int cantidad = rs1.getInt("cantidad");
+                            String urlImagen = rs1.getString("url_imagen");
+                %>
 
-                                            <div class="slider-item  p-4 rounded-lg shadow-md text-center">
-                                                <a href="producto.jsp?id_producto=<%= id_Producto %>">
-                                                    <img src="${pageContext.request.contextPath}<%= urlImagen %>" alt="<%= marca  %>" class="transition duration-300 transform hover:scale-105 hover:shadow-yellow-400">
-                                                </a>
-                                                <div class="mt-2">
-                                                    <h2 class="text-lg font-bold"><%= descripcion %></h2>
-                                                    <p class=" text-xl stat-value text-yellow-500">S/<%= precio %></p>
-                                                </div>
+                <div class="slider-item  p-4 rounded-lg shadow-md text-center">
+                    <a href="producto.jsp?id_producto=<%= id_Producto%>">
+                        <img src="${pageContext.request.contextPath}<%= urlImagen%>" alt="<%= marca%>" class="transition duration-300 transform hover:scale-105 hover:shadow-yellow-400">
+                    </a>
+                    <div class="mt-2">
+                        <h2 class="text-lg font-bold"><%= descripcion%></h2>
+                        <p class=" text-xl stat-value text-yellow-500">S/<%= precio%></p>
+                    </div>
 
-                                                <a href="producto.jsp?id_producto=<%= id_Producto %>" class="btn  btn-warning btn-sm text-white mt-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white w-max rounded-full "><i class="fi fi-rr-shopping-cart"></i>Comprar </a>
-                                            </div>
+                    <a href="producto.jsp?id_producto=<%= id_Producto%>" class="btn  btn-warning btn-sm text-white mt-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white w-max rounded-full "><i class="fi fi-rr-shopping-cart"></i>Comprar </a>
+                </div>
 
 
-                                            <%
-                                                    }
-                                                    if (!hayProductos) {
-                                            %>
-                                            <p>No hay productos disponibles.</p>
-                                            <%
-                                                    }
-                                                } catch (Exception e) {
-                                                    out.println("Error al conectar a la base de datos: " + e.getMessage());
-                                                } finally {
-                                                    // Cerrar la conexión utilizando el método de la clase Mantenimiento
-                                                    try {
-                                                        if (rs1 != null) rs1.close();
-                                                        if (pstmt1 != null) pstmt1.close();
-                                                        if (conexion != null) conexion.close();
-                                                    } catch (SQLException e) {
-                                                        out.println("Error al cerrar la conexión: " + e.getMessage());
-                                                    }
-                                                }
-                                            %>
-                                        </div>
-                                        <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
-                                            &#10094;
-                                        </button>
-                                        <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
-                                            &#10095;
-                                        </button>
-                                    </div>
-        
+                <%
+                    }
+                    if (!hayProductos) {
+                %>
+                <p>No hay productos disponibles.</p>
+                <%
+                        }
+                    } catch (Exception e) {
+                        out.println("Error al conectar a la base de datos: " + e.getMessage());
+                    } finally {
+                        // Cerrar la conexión utilizando el método de la clase Mantenimiento
+                        try {
+                            if (rs1 != null) {
+                                rs1.close();
+                            }
+                            if (pstmt1 != null) {
+                                pstmt1.close();
+                            }
+                            if (conexion != null) {
+                                conexion.close();
+                            }
+                        } catch (SQLException e) {
+                            out.println("Error al cerrar la conexión: " + e.getMessage());
+                        }
+                    }
+                %>
+            </div>
+            <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
+                &#10094;
+            </button>
+            <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full z-10">
+                &#10095;
+            </button>
+        </div>
+
         <% String mensaje = request.getParameter("mensaje"); %>
         <% if (mensaje != null && !mensaje.isEmpty()) { %>
         <% if (mensaje.equals("insuficiente")) { %>
@@ -648,7 +664,7 @@
             </div>
         </div>
         <% } %>
-        <% } %>
+        <% }%>
         <div id="modalContainer" class="fixed inset-0 z-50 hidden overflow-y-auto " aria-labelledby="modal-title"
              role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -697,7 +713,7 @@
                 </div>
             </div>
         </div>
-        <div id="registroModalContainer" class="fixed inset-0 z-50 hidden overflow-y-auto "
+        <div id="registroModalContainer" class="fixed inset-0 z-50 hidden overflow-y-auto"
              aria-labelledby="registro-modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -715,69 +731,69 @@
                     <div class="text-center">
                         <h2 id="registro-modal-title" class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
                     </div>
-                    <form id="registroForm" class="mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
+                    <form class="registroForm mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
                         <div>
-                            <label for="nombreUsuario" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
-                            <input id="nombreUsuario" name="nombreUsuario" type="text" required
-                                   class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            <label for="nombreUsuario2" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+                            <input id="nombreUsuario2" name="nombreUsuario" type="text" required
+                                   class="nombreUsuario mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                    placeholder="Ingrese el nombre de usuario">
-                            <span id="errorNombreUsuario" class="text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
+                            <span class="errorNombreUsuario text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
                         </div>
                         <div>
-                            <label for="correo" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                            <input id="correo" name="correo" type="email" required
+                            <label for="correo2" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                            <input id="correo2" name="correo" type="email" required
                                    class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                    placeholder="Ingrese su correo electrónico">
                         </div>
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                            <input id="password" name="password" type="password" required
+                            <label for="password2" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                            <input id="password2" name="password" type="password" required
                                    class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                    placeholder="Ingrese su contraseña">
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                <input id="nombre" name="nombre" type="text" required
+                                <label for="nombre2" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                <input id="nombre2" name="nombre" type="text" required
                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                        placeholder="Ingrese su nombre">
                             </div>
                             <div>
-                                <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
-                                <input id="apellido" name="apellido" type="text" required
+                                <label for="apellido2" class="block text-sm font-medium text-gray-700">Apellido</label>
+                                <input id="apellido2" name="apellido" type="text" required
                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                        placeholder="Ingrese su apellido">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
-                                <select id="tipo_documento" name="tipo_documento" required
+                                <label for="tipo_documento2" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
+                                <select id="tipo_documento2" name="tipo_documento" required
                                         class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
                                     <option value="1">DNI</option>
                                     <option value="2">Pasaporte</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="numeroDocumento" class="block text-sm font-medium text-gray-700">Número Documento</label>
-                                <input id="numeroDocumento" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8"  required
+                                <label for="numeroDocumento2" class="block text-sm font-medium text-gray-700">Número Documento</label>
+                                <input id="numeroDocumento2" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
                                        class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                        placeholder="Ingrese su número de documento">
                             </div>
                         </div>
                         <div>
-                            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <input id="telefono" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
+                            <label for="telefono2" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            <input id="telefono2" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
                                    class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                    placeholder="Ingrese su teléfono">
                         </div>
                         <div>
                             <button type="submit"
-                                    class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">Crear
-                                Cuenta</button>
+                                    class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
+                                Crear Cuenta
+                            </button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -826,7 +842,7 @@
         </footer>
 </html>
 <script src="js/ModalSesion.js"></script>
-        <script src="js/ValidacionSesion.js"></script>
+<script src="js/ValidacionUsuario.js"></script>
 <script src="js/navbar.js"></script>
 <script src="js/slider.js"></script>
 </body>
