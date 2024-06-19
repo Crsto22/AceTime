@@ -14,17 +14,17 @@
         response.sendRedirect("index.jsp");
         return;
     }
-    
-Mantenimiento mantenimiento2 = new Mantenimiento();
-mantenimiento2.conectarBD();
-List<Marca> marcas = mantenimiento2.obtenerMarcas();
-mantenimiento2.cerrarBD();
 
-Mantenimiento mantenimiento3 = new Mantenimiento();
-mantenimiento3.conectarBD();
-List<Proveedor> proveedores = mantenimiento3.obtenerProveedores();
-mantenimiento3.cerrarBD();
-                         
+    Mantenimiento mantenimiento2 = new Mantenimiento();
+    mantenimiento2.conectarBD();
+    List<Marca> marcas = mantenimiento2.obtenerMarcas();
+    mantenimiento2.cerrarBD();
+
+    Mantenimiento mantenimiento3 = new Mantenimiento();
+    mantenimiento3.conectarBD();
+    List<Proveedor> proveedores = mantenimiento3.obtenerProveedores();
+    mantenimiento3.cerrarBD();
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +55,7 @@ mantenimiento3.cerrarBD();
                 <div class="dropdown dropdown-end">
                     <div>
                         <div class="indicator">
-                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario") %></span></span>
+                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario")%></span></span>
                         </div>
                     </div>
 
@@ -128,16 +128,18 @@ mantenimiento3.cerrarBD();
             <div id="main-content" class="md:ml-72 p-8">
                 <div>
                     <!-- BotÃ³n para agregar producto -->
-                    <div class="flex justify-between items-center mb-4 mt-14">
-                        <button class="btn btn-success text-white flex items-center gap-2" onclick="my_modal_3.showModal()">
-                            <i class="fi fi-rs-plus"></i> Agregar Producto
-                        </button>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
-                            <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
-                            </svg>
-                        </label>  
+                    <div class="mb-4 mt-14">
+                        <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                            <button class="btn btn-success text-white flex items-center gap-2 w-full lg:w-auto" onclick="my_modal_3.showModal()">
+                                <i class="fi fi-rs-plus"></i> Agregar Producto
+                            </button>
+                            <label class="input input-bordered flex items-center gap-2 w-full lg:w-auto">
+                                <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                                <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+                                </svg>
+                            </label>
+                        </div>
                     </div>
 
 
@@ -152,13 +154,13 @@ mantenimiento3.cerrarBD();
                                 </button>
                             </form>
                             <h1 class="text-2xl font-bold mb-4">Agregar Producto</h1>
-                            <form action="AgregarProducto" method="POST" enctype="multipart/form-data">
+                            <form action="AgregaProducto" method="POST" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="marcaEdit2" class="block text-sm font-semibold mb-2">Marca</label>
                                     <select name="marca" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
                                         <option value="">Seleccione una marca</option>
-                                        <% for (Marca marca : marcas) { %>
-                                        <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
+                                        <% for (Marca marca : marcas) {%>
+                                        <option value="<%= marca.getIdMarca()%>"><%= marca.getNombreMarca()%></option>
                                         <% } %>
                                     </select>
                                 </div>
@@ -182,8 +184,8 @@ mantenimiento3.cerrarBD();
                                     <label for="proveedorEdit" class="block text-sm font-semibold mb-2">Proveedor</label>
                                     <select name="proveedor" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
                                         <option value="">Seleccione un proveedor</option>
-                                        <% for (Proveedor proveedor : proveedores) { %>
-                                        <option value="<%= proveedor.getIdProveedor() %>"><%= proveedor.getNombreProveedor() %></option>
+                                        <% for (Proveedor proveedor : proveedores) {%>
+                                        <option value="<%= proveedor.getIdProveedor()%>"><%= proveedor.getNombreProveedor()%></option>
                                         <% } %>
                                     </select>
                                 </div>
@@ -217,41 +219,41 @@ mantenimiento3.cerrarBD();
                         </thead>
                         <tbody>
                             <%
-                            Mantenimiento mantenimiento = new Mantenimiento();
-                            Connection connection = null;
-                            PreparedStatement statement = null;
-                            ResultSet resultSet = null;
-                            try {
-                                mantenimiento.conectarBD();
-                                connection = mantenimiento.getConexion();
-                                statement = connection.prepareStatement(
-                                    "SELECT P.id_producto, P.descripcion, P.precio, P.cantidad, P.url_imagen, " +
-                                    "M.id_marca, M.nombre_marca, PR.id_proveedor, PR.nombre_proveedor " +
-                                    "FROM Productos AS P " +
-                                    "JOIN Marca AS M ON P.marca_id = M.id_marca " +
-                                    "JOIN Proveedores AS PR ON P.proveedor_id = PR.id_proveedor;"
-                                );
-                                resultSet = statement.executeQuery();
-                                while (resultSet.next()) {
+                                Mantenimiento mantenimiento = new Mantenimiento();
+                                Connection connection = null;
+                                PreparedStatement statement = null;
+                                ResultSet resultSet = null;
+                                try {
+                                    mantenimiento.conectarBD();
+                                    connection = mantenimiento.getConexion();
+                                    statement = connection.prepareStatement(
+                                            "SELECT P.id_producto, P.descripcion, P.precio, P.cantidad, P.url_imagen, "
+                                            + "M.id_marca, M.nombre_marca, PR.id_proveedor, PR.nombre_proveedor "
+                                            + "FROM Productos AS P "
+                                            + "JOIN Marca AS M ON P.marca_id = M.id_marca "
+                                            + "JOIN Proveedores AS PR ON P.proveedor_id = PR.id_proveedor;"
+                                    );
+                                    resultSet = statement.executeQuery();
+                                    while (resultSet.next()) {
                             %>
                             <tr class="border-b bg-white hover:bg-orange-100" 
-                                data-id="<%= resultSet.getInt("id_producto") %>"
-                                data-marca-id="<%= resultSet.getInt("id_marca") %>"
-                                data-descripcion="<%= resultSet.getString("descripcion") %>"
-                                data-precio="<%= resultSet.getDouble("precio") %>"
-                                data-cantidad="<%= resultSet.getInt("cantidad") %>"
-                                data-proveedor-id="<%= resultSet.getInt("id_proveedor") %>"
-                                data-imagen-url="<%= resultSet.getString("url_imagen") %>">
+                                data-id="<%= resultSet.getInt("id_producto")%>"
+                                data-marca-id="<%= resultSet.getInt("id_marca")%>"
+                                data-descripcion="<%= resultSet.getString("descripcion")%>"
+                                data-precio="<%= resultSet.getDouble("precio")%>"
+                                data-cantidad="<%= resultSet.getInt("cantidad")%>"
+                                data-proveedor-id="<%= resultSet.getInt("id_proveedor")%>"
+                                data-imagen-url="<%= resultSet.getString("url_imagen")%>">
 
-                                <td class="p-3"><%= resultSet.getInt("id_producto") %></td>
-                                <td class="p-3"><%= resultSet.getString("nombre_marca") %></td>
-                                <td class="p-3"><%= resultSet.getString("descripcion") %></td>
-                                <td class="p-3">S/<%= resultSet.getDouble("precio") %></td>
-                                <td class="p-3"><%= resultSet.getInt("cantidad") %></td>
+                                <td class="p-3"><%= resultSet.getInt("id_producto")%></td>
+                                <td class="p-3"><%= resultSet.getString("nombre_marca")%></td>
+                                <td class="p-3"><%= resultSet.getString("descripcion")%></td>
+                                <td class="p-3">S/<%= resultSet.getDouble("precio")%></td>
+                                <td class="p-3"><%= resultSet.getInt("cantidad")%></td>
                                 <td class="p-3">
-                                    <img src="<%= request.getContextPath() + resultSet.getString("url_imagen") %>" alt="Producto" class="w-24 h-24 object-cover rounded-full">
+                                    <img src="<%= request.getContextPath() + resultSet.getString("url_imagen")%>" alt="Producto" class="w-24 h-24 object-cover rounded-full">
                                 </td>
-                                <td class="p-3"><%= resultSet.getString("nombre_proveedor") %></td>
+                                <td class="p-3"><%= resultSet.getString("nombre_proveedor")%></td>
                                 <td class="p-3">
                                     <!-- BotÃ³n para editar -->
                                     <button class="btn text-white btn-warning btn-sm mr-2 edit-btn">
@@ -259,7 +261,7 @@ mantenimiento3.cerrarBD();
                                     </button>
 
                                     <!-- Modal para editar -->
-                                    <dialog id="edit_modal_<%= resultSet.getInt("id_producto") %>" class="modal">
+                                    <dialog id="edit_modal_<%= resultSet.getInt("id_producto")%>" class="modal">
                                         <div class="modal-box">
                                             <form method="dialog">
                                                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -270,42 +272,42 @@ mantenimiento3.cerrarBD();
                                             </form>
                                             <div class="p-8 rounded-lg max-w-md w-full">
                                                 <h2 class="text-2xl font-bold mb-6 text-gray-800">Editar Producto</h2>
-                                                <form action="ActualizaProducto" method="post" enctype="multipart/form-data">
-                                                    <input type="hidden" name="id_producto" value="<%= resultSet.getInt("id_producto") %>">
+                                                <form action="ActualizarProducto" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="id_producto" value="<%= resultSet.getInt("id_producto")%>">
                                                     <input type="hidden" name="imagen_actual" value="">
 
                                                     <div class="mb-4">
                                                         <label for="marcaEdit2" class="block text-sm font-semibold mb-2">Marca</label>
                                                         <select name="marca" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
                                                             <option value="">Seleccione una marca</option>
-                                                            <% for (Marca marca : marcas) { %>
-                                                            <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
-                                                            <% } %>
+                                                            <% for (Marca marca : marcas) {%>
+                                                            <option value="<%= marca.getIdMarca()%>"><%= marca.getNombreMarca()%></option>
+                                                            <% }%>
                                                         </select>
                                                     </div>
 
                                                     <div class="mb-4">
                                                         <label for="descripcionEdit2" class="block text-sm font-semibold mb-2">Descripción</label>
-                                                        <textarea name="descripcion" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripción" required><%= resultSet.getString("descripcion") %></textarea>
+                                                        <textarea name="descripcion" rows="4" class="w-full px-4 py-2 border rounded-md resize-none focus:outline-none focus:border-blue-500" placeholder="Ingrese la descripción" required><%= resultSet.getString("descripcion")%></textarea>
                                                     </div>
 
                                                     <div class="mb-4">
                                                         <label for="precioEdit2" class="block text-sm font-semibold mb-2">Precio</label>
-                                                        <input type="number" name="precio" min="0" step="0.01" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Ingrese el precio" required value="<%= resultSet.getDouble("precio") %>">
+                                                        <input type="number" name="precio" min="0" step="0.01" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Ingrese el precio" required value="<%= resultSet.getDouble("precio")%>">
                                                     </div>
 
                                                     <div class="mb-4">
                                                         <label for="cantidadEdit2" class="block text-sm font-semibold mb-2">Cantidad</label>
-                                                        <input type="number" name="cantidad" min="0" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Ingrese la cantidad" required value="<%= resultSet.getInt("cantidad") %>">
+                                                        <input type="number" name="cantidad" min="0" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Ingrese la cantidad" required value="<%= resultSet.getInt("cantidad")%>">
                                                     </div>
 
                                                     <div class="mb-4">
                                                         <label for="proveedorEdit" class="block text-sm font-semibold mb-2">Proveedor</label>
                                                         <select name="proveedor" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" required>
                                                             <option value="">Seleccione un proveedor</option>
-                                                            <% for (Proveedor proveedor : proveedores) { %>
-                                                            <option value="<%= proveedor.getIdProveedor() %>"><%= proveedor.getNombreProveedor() %></option>
-                                                            <% } %>
+                                                            <% for (Proveedor proveedor : proveedores) {%>
+                                                            <option value="<%= proveedor.getIdProveedor()%>"><%= proveedor.getNombreProveedor()%></option>
+                                                            <% }%>
                                                         </select>
                                                     </div>
 
@@ -324,12 +326,12 @@ mantenimiento3.cerrarBD();
 
                                     <!-- BotÃ³n para eliminar -->
                                     <button class="btn text-white btn-error btn-sm"
-                                            onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_producto") %>').showModal()">
+                                            onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_producto")%>').showModal()">
                                         <i class="fi fi-rs-trash"></i>
                                     </button>
 
                                     <!-- Modal para eliminar -->
-                                    <dialog id="delete_modal_<%= resultSet.getInt("id_producto") %>" class="modal">
+                                    <dialog id="delete_modal_<%= resultSet.getInt("id_producto")%>" class="modal">
                                         <div class="modal-box">
                                             <div class="flex items-center mb-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" style="enable-background:new 0 0 128 128 ; width: 40px;" version="1.1" viewBox="0 0 128 128" xml:space="preserve">
@@ -344,13 +346,13 @@ mantenimiento3.cerrarBD();
                                                 <circle class="st0" cx="64" cy="64" r="64"/>
                                                 <path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/>
                                                 </svg>
-                                                <h3 class="ml-6 font-bold text-lg">¿Estás seguro de eliminar el producto <%= resultSet.getString("descripcion") %>?</h3>
+                                                <h3 class="ml-6 font-bold text-lg">¿Estás seguro de eliminar el producto <%= resultSet.getString("descripcion")%>?</h3>
                                             </div>
                                             <p class="py-4">Esta acción no se puede deshacer.</p>
                                             <div class="flex justify-end">
-                                                <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_producto") %>').close()">Cancelar</button>
+                                                <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_producto")%>').close()">Cancelar</button>
                                                 <form action="crudeliminarproducto.jsp" method="post">
-                                                    <input type="hidden" name="id_producto" value="<%= resultSet.getInt("id_producto") %>">
+                                                    <input type="hidden" name="id_producto" value="<%= resultSet.getInt("id_producto")%>">
                                                     <button type="submit" class="btn btn-error text-white">Aceptar</button>
                                                 </form>
                                             </div>
@@ -358,15 +360,27 @@ mantenimiento3.cerrarBD();
                                     </dialog>    
                                 </td>
                             </tr>
-                            <% 
-                                } 
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            } finally {
-                                if (resultSet != null) try { resultSet.close(); } catch (SQLException e) { e.printStackTrace(); }
-                                if (statement != null) try { statement.close(); } catch (SQLException e) { e.printStackTrace(); }
-                                if (connection != null) try { connection.close(); } catch (SQLException e) { e.printStackTrace(); }
-                            }
+                            <%
+                                    }
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    if (resultSet != null) try {
+                                        resultSet.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (statement != null) try {
+                                        statement.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (connection != null) try {
+                                        connection.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             %>
                         </tbody>
                     </table>
@@ -455,25 +469,25 @@ mantenimiento3.cerrarBD();
                     });
                 </script>
                 <script src="js/sidebar.js"></script>
-                 <script>
-function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.querySelector(".table");
-    tr = table.getElementsByTagName("tr");
+                <script>
+                   function filterTable() {
+                       var input, filter, table, tr, td, i, txtValue;
+                       input = document.getElementById("searchInput");
+                       filter = input.value.toUpperCase();
+                       table = document.querySelector(".table");
+                       tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) {
-        tr[i].style.display = "none"; // Ocultar la fila inicialmente
-        td = tr[i].getElementsByTagName("td")[2]; // Seleccionar solo la tercera columna (índice 2)
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
-            }
-        }
-    }
-}
-</script>
+                       for (i = 1; i < tr.length; i++) {
+                           tr[i].style.display = "none"; // Ocultar la fila inicialmente
+                           td = tr[i].getElementsByTagName("td")[2]; // Seleccionar solo la tercera columna (índice 2)
+                           if (td) {
+                               txtValue = td.textContent || td.innerText;
+                               if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                   tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
+                               }
+                           }
+                       }
+                   }
+                </script>
                 </body>
                 </html>

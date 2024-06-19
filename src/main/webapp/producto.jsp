@@ -16,12 +16,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Producto </title>
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+       <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
-        <link rel='stylesheet'
-              href='https://cdn-uicons.flaticon.com/2.4.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-<style>
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+   <style>
                                 .slider-wrapper {
                                     overflow: hidden;
                                     position: relative;
@@ -237,33 +240,152 @@
                                 <a href="nosotros.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5 ">Nosotros</a>
                                 <a href="contactos.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5 ">Contactos</a>
                                 <div class="mx-5 mt-2 mb-2 border-t border-gray-300"></div> 
-                                <% 
-             if (session.getAttribute("nombreUsuario") != null) { 
-                 if ("admin".equals(sesion.getAttribute("rol"))) { 
+                                <%
+                                    if (session.getAttribute("nombreUsuario") != null) {
+                                        if ("admin".equals(sesion.getAttribute("rol"))) {
                                 %>
                                 <a href="CambioRol.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5" > <i class="fi fi-rr-convert-shapes"></i> Cambiar Rol</a>
                                 <a href="cerrarsesion.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5" > <i class="fi fi-rr-exit"></i> Cerrar Sesion</a>
-                                <% 
-                                    } else if ("cliente".equals(sesion.getAttribute("rol"))) {
+                                <%
+                                } else if ("cliente".equals(sesion.getAttribute("rol"))) {
                                 %>
                                 <a href="AjustesUsuario.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5"> <i class="fi fi-rr-admin-alt"></i> Cuenta</a>
                                 <a href="cerrarsesion.jsp" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5" > <i class="fi fi-rr-exit"></i> Cerrar Sesion</a>
-                                <% 
-                                   }
-                               } else {
+                                <%
+                                    }
+                                } else {
                                 %>
-                                <a id="openModal" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5"> <i class="fi fi-rr-sign-in-alt"></i> Iniciar Sesion</a>
-                                <% 
-                               }
+                                <a onclick="my_modal_3.showModal()" class="text-gray-800 text-base font-semibold hover:text-yellow-600 mb-1 mx-5"> <i class="fi fi-rr-sign-in-alt"></i> Iniciar Sesion</a>
+                                <%
+                                    }
                                 %>
+                                <!-- Botón para productos -->
                                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle mx-5" onclick="window.location.href = 'carito.jsp';">
                                     <div class="indicator">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                         </svg>
-                                        <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos %></span>
+                                        <span class="badge badge-xl indicator-item bg-yellow-400 text-white"><%= totalProductos%></span>
                                     </div>
                                 </div>
+
+                                <!-- Primer modal -->
+                                <dialog id="my_modal_3" class="modal">
+                                    <div class="modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <div class="text-center">
+                                            <h2 class="text-3xl font-extrabold text-gray-900">Iniciar Sesion</h2>
+                                        </div>
+                                        <form class="mt-8 space-y-6" action="procesarlogin.jsp" method="POST">
+                                            <div>
+                                                <label for="email-address" class="block text-sm font-medium text-gray-700">Usuario</label>
+                                                <input id="email-address" name="usuario" type="text" required
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingrese el usuario">
+                                            </div>
+                                            <div>
+                                                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                                <input id="password" name="password" type="password" required
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingresa su contraseña">
+                                            </div>
+                                            <div>
+                                                <button type="submit"
+                                                        class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
+                                                    Ingresar
+                                                </button>
+                                            </div>
+                                            <div class="mb-4 text-center">
+                                                <a href="#" onclick="document.getElementById('my_modal_2').showModal()" class="text-sm text-yellow-700 hover:underline">¿No tienes una cuenta? Crear una</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </dialog>
+
+                                <!-- Segundo modal -->
+                                <dialog id="my_modal_2" class="modal">
+                                    <div class="modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <div class="text-center">
+                                            <h2 class="text-3xl font-extrabold text-gray-900">Crear Cuenta</h2>
+                                        </div>
+                                        <form class="mt-8 space-y-6" action="procesoregistrousuario.jsp" method="POST">
+                                            <div>
+                                                <label for="nombreUsuario" class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+                                                <input id="nombreUsuario" name="nombreUsuario" type="text" required
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingrese el nombre de usuario">
+                                                <span id="errorNombreUsuario" class="text-red-500 text-sm hidden">El nombre de usuario debe ser una sola palabra.</span>
+                                            </div>
+                                            <div>
+                                                <label for="correo" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                                                <input id="correo" name="correo" type="email" required
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingrese su correo electrónico">
+                                            </div>
+                                            <div>
+                                                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                                                <input id="password" name="password" type="password" required
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingrese su contraseña">
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                                    <input id="nombre" name="nombre" type="text" required
+                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                           placeholder="Ingrese su nombre">
+                                                </div>
+                                                <div>
+                                                    <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
+                                                    <input id="apellido" name="apellido" type="text" required
+                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                           placeholder="Ingrese su apellido">
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo Documento</label>
+                                                    <select id="tipo_documento" name="tipo_documento" required
+                                                            class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+                                                        <option value="1">DNI</option>
+                                                        <option value="2">Pasaporte</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label for="numeroDocumento" class="block text-sm font-medium text-gray-700">Número Documento</label>
+                                                    <input id="numeroDocumento" name="numeroDocumento" type="text" pattern="^[0-9]{8}$" maxlength="8" required
+                                                           class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                           placeholder="Ingrese su número de documento">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                                <input id="telefono" name="telefono" type="tel" required pattern="^[0-9]{9}$" maxlength="9"
+                                                       class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                       placeholder="Ingrese su teléfono">
+                                            </div>
+                                            <div>
+                                                <button type="submit"
+                                                        class="w-full flex justify-center py-2 px-4 text-white bg-black text-xl font-semibold border px-4 py-2 rounded-lg hover:text-white hover:border-yellow-600 hover:bg-yellow-600 mb-4 md:mb-0">
+                                                    Crear Cuenta
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </dialog>
                             </div>
                         </div>
                     </div>

@@ -37,6 +37,7 @@ public class ReporteVentas extends HttpServlet {
 
         String fechaInicio = request.getParameter("fecha-inicio");
         String fechaFin = request.getParameter("fecha-fin");
+        String nombre = request.getParameter("nombre"); // Obtener el nombre
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate endDate = LocalDate.parse(fechaFin, formatter);
@@ -84,10 +85,26 @@ public class ReporteVentas extends HttpServlet {
 
             document.add(new Paragraph("\n"));
 
-            try (PreparedStatement sumStatement = conn.prepareStatement("SELECT SUM(dc.total_compra) AS total_compras_entre_fechas FROM Detalle_Compra dc LEFT JOIN Datos_comprador c ON dc.id_comprador = c.id_comprador LEFT JOIN Usuarios u ON dc.id_usuario = u.id_usuario WHERE dc.fecha_compra >= ? AND dc.fecha_compra < ?")) {
+            // Modificar la consulta SQL para incluir el filtro por nombre si se proporciona
+            String totalQuery = "SELECT SUM(dc.total_compra) AS total_compras_entre_fechas " +
+                                "FROM Detalle_Compra dc " +
+                                "LEFT JOIN Datos_comprador c ON dc.id_comprador = c.id_comprador " +
+                                "LEFT JOIN Usuarios u ON dc.id_usuario = u.id_usuario " +
+                                "WHERE dc.fecha_compra >= ? AND dc.fecha_compra < ?";
+
+            if (nombre != null && !nombre.isEmpty()) {
+                totalQuery += " AND (c.nombre LIKE ? OR u.nombre LIKE ?)";
+            }
+
+            try (PreparedStatement sumStatement = conn.prepareStatement(totalQuery)) {
 
                 sumStatement.setString(1, fechaInicio);
                 sumStatement.setString(2, fechaFinIncrementada);
+
+                if (nombre != null && !nombre.isEmpty()) {
+                    sumStatement.setString(3, "%" + nombre + "%");
+                    sumStatement.setString(4, "%" + nombre + "%");
+                }
 
                 try (ResultSet sumResultSet = sumStatement.executeQuery()) {
                     if (sumResultSet.next()) {
@@ -124,46 +141,59 @@ public class ReporteVentas extends HttpServlet {
 
             document.add(new Paragraph("\n"));
 
-            Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 3, 2, 1, 2}));
-            table.setWidth(UnitValue.createPercentValue(100));
+            String dataQuery = "SELECT dc.id_compra, c.nombre AS nombre_comprador, c.apellido AS apellido_comprador, c.Num_Documento AS num_doc_comprador, " +
+                               "dc.total_compra, dc.fecha_compra, u.nombre AS nombre_cliente, u.apellido AS apellido_cliente, u.Num_Documento AS num_doc_cliente " +
+                               "FROM Detalle_Compra dc " +
+                               "LEFT JOIN Datos_comprador c ON dc.id_comprador = c.id_comprador " +
+                               "LEFT JOIN Usuarios u ON dc.id_usuario = u.id_usuario " +
+                               "WHERE dc.fecha_compra >= ? AND dc.fecha_compra < ?";
 
-            Color headerColor = new DeviceRgb(250, 173, 28);
-            Color rowColor = new DeviceRgb(255, 255, 255);
-            table.addHeaderCell(new Cell().add(new Paragraph("ID")).setBackgroundColor(headerColor).setFontColor(rowColor));
-            table.addHeaderCell(new Cell().add(new Paragraph("NOMBRE")).setBackgroundColor(headerColor).setFontColor(rowColor));
-            table.addHeaderCell(new Cell().add(new Paragraph("APELLIDO")).setBackgroundColor(headerColor).setFontColor(rowColor));
-            table.addHeaderCell(new Cell().add(new Paragraph("DOCUMENTO")).setBackgroundColor(headerColor).setFontColor(rowColor));
-            table.addHeaderCell(new Cell().add(new Paragraph("TOTAL COMPRA")).setBackgroundColor(headerColor).setFontColor(rowColor));
-            table.addHeaderCell(new Cell().add(new Paragraph("FECHA COMPRA")).setBackgroundColor(headerColor).setFontColor(rowColor));
+            if (nombre != null && !nombre.isEmpty()) {
+                dataQuery += " AND (c.nombre LIKE ? OR u.nombre LIKE ?)";
+            }
 
-            // Conectar a la base de datos y obtener datos filtrados por fecha
-            try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT dc.id_compra, c.nombre AS nombre_comprador, c.apellido AS apellido_comprador, c.Num_Documento AS num_doc_comprador, dc.total_compra, dc.fecha_compra, u.nombre AS nombre_cliente, u.apellido AS apellido_cliente, u.Num_Documento AS num_doc_cliente FROM Detalle_Compra dc LEFT JOIN Datos_comprador c ON dc.id_comprador = c.id_comprador LEFT JOIN Usuarios u ON dc.id_usuario = u.id_usuario WHERE dc.fecha_compra >= ? AND dc.fecha_compra < ?")) {
-
+            try (PreparedStatement preparedStatement = conn.prepareStatement(dataQuery)) {
                 preparedStatement.setString(1, fechaInicio);
                 preparedStatement.setString(2, fechaFinIncrementada);
 
+                if (nombre != null && !nombre.isEmpty()) {
+                    preparedStatement.setString(3, "%" + nombre + "%");
+                    preparedStatement.setString(4, "%" + nombre + "%");
+                }
+
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 3, 2, 1, 2}));
+                    table.setWidth(UnitValue.createPercentValue(100));
+
+                    Color headerColor = new DeviceRgb(250, 173, 28);
+                    Color rowColor = new DeviceRgb(255, 255, 255);
+                    table.addHeaderCell(new Cell().add(new Paragraph("ID")).setBackgroundColor(headerColor).setFontColor(rowColor));
+                    table.addHeaderCell(new Cell().add(new Paragraph("NOMBRE")).setBackgroundColor(headerColor).setFontColor(rowColor));
+                    table.addHeaderCell(new Cell().add(new Paragraph("APELLIDO")).setBackgroundColor(headerColor).setFontColor(rowColor));
+                    table.addHeaderCell(new Cell().add(new Paragraph("DOCUMENTO")).setBackgroundColor(headerColor).setFontColor(rowColor));
+                    table.addHeaderCell(new Cell().add(new Paragraph("TOTAL COMPRA")).setBackgroundColor(headerColor).setFontColor(rowColor));
+                    table.addHeaderCell(new Cell().add(new Paragraph("FECHA COMPRA")).setBackgroundColor(headerColor).setFontColor(rowColor));
+
                     while (resultSet.next()) {
                         table.addCell(resultSet.getString("id_compra"));
 
-                        String nombre = resultSet.getString("nombre_comprador") != null ? resultSet.getString("nombre_comprador") : resultSet.getString("nombre_cliente");
+                        String nombreComprador = resultSet.getString("nombre_comprador") != null ? resultSet.getString("nombre_comprador") : resultSet.getString("nombre_cliente");
                         String apellido = resultSet.getString("apellido_comprador") != null ? resultSet.getString("apellido_comprador") : resultSet.getString("apellido_cliente");
                         String documento = resultSet.getString("num_doc_comprador") != null ? resultSet.getString("num_doc_comprador") : resultSet.getString("num_doc_cliente");
 
-                        table.addCell(nombre);
+                        table.addCell(nombreComprador);
                         table.addCell(apellido);
                         table.addCell(documento);
                         table.addCell(resultSet.getString("total_compra"));
                         table.addCell(resultSet.getString("fecha_compra"));
                     }
+
+                    document.add(table);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 document.add(new Paragraph("Error al obtener datos: " + e.getMessage()));
             }
-
-            
-            document.add(table);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -92,55 +92,59 @@
         <div class="container mx-auto px-max py-8">
             <div class="grid grid-cols- md:grid-cols-2 gap-8">
                 <%
-    String mensaje = "";
+                    String mensaje = "";
 
-    // Obtener el idUsuario de la sesión
-    Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-    String sesion_id = "";
+                    // Obtener el idUsuario de la sesión
+                    Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+                    String sesion_id = "";
 
-    // Obtener la ID de sesión desde la cookie o generar una nueva si no existe
-    if (idUsuario == null) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("sesion_id".equals(cookie.getName())) {
-                    sesion_id = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (sesion_id.isEmpty()) {
-            sesion_id = UUID.randomUUID().toString();
-            Cookie sesionCookie = new Cookie("sesion_id", sesion_id);
-            sesionCookie.setPath("/");
-            response.addCookie(sesionCookie);
-        }
-    }
+                    // Obtener la ID de sesión desde la cookie o generar una nueva si no existe
+                    if (idUsuario == null) {
+                        Cookie[] cookies = request.getCookies();
+                        if (cookies != null) {
+                            for (Cookie cookie : cookies) {
+                                if ("sesion_id".equals(cookie.getName())) {
+                                    sesion_id = cookie.getValue();
+                                    break;
+                                }
+                            }
+                        }
+                        if (sesion_id.isEmpty()) {
+                            sesion_id = UUID.randomUUID().toString();
+                            Cookie sesionCookie = new Cookie("sesion_id", sesion_id);
+                            sesionCookie.setPath("/");
+                            response.addCookie(sesionCookie);
+                        }
+                    }
 
-     Mantenimiento mantenimiento = new Mantenimiento();
-        mantenimiento.conectarBD();
-        Connection conn = mantenimiento.getConexion();
+                    Mantenimiento mantenimiento = new Mantenimiento();
+                    mantenimiento.conectarBD();
+                    Connection conn = mantenimiento.getConexion();
 
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+                    PreparedStatement pstmt = null;
+                    ResultSet rs = null;
 
-        try {
-            String query;
-            if (idUsuario != null) {
-                query = "SELECT p.id_producto, m.nombre_marca, p.precio, p.descripcion, c.cantidad, p.url_imagen FROM Productos p INNER JOIN Marca m ON p.marca_id = m.id_marca INNER JOIN carrito c ON p.id_producto = c.id_producto WHERE c.id_usuario = ?;";
-                pstmt = conn.prepareStatement(query);
-                pstmt.setInt(1, idUsuario);
-            } else {
-                query = "SELECT p.id_producto, m.nombre_marca, p.precio, p.descripcion, c.cantidad, p.url_imagen FROM Productos p INNER JOIN Marca m ON p.marca_id = m.id_marca INNER JOIN carrito c ON p.id_producto = c.id_producto WHERE c.sesion_id = ?";
-                pstmt = conn.prepareStatement(query);
-                pstmt.setString(1, sesion_id);
-            }
+                    try {
+                        String deleteQuery = "DELETE FROM carrito WHERE id_producto IN (SELECT id_producto FROM Productos WHERE cantidad = 0)";
+                        PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+                        deleteStmt.executeUpdate();
 
-            rs = pstmt.executeQuery();
+                        String query;
+                        if (idUsuario != null) {
+                            query = "SELECT p.id_producto, m.nombre_marca, p.precio, p.descripcion, c.cantidad, p.url_imagen FROM Productos p INNER JOIN Marca m ON p.marca_id = m.id_marca INNER JOIN carrito c ON p.id_producto = c.id_producto WHERE c.id_usuario = ?;";
+                            pstmt = conn.prepareStatement(query);
+                            pstmt.setInt(1, idUsuario);
+                        } else {
+                            query = "SELECT p.id_producto, m.nombre_marca, p.precio, p.descripcion, c.cantidad, p.url_imagen FROM Productos p INNER JOIN Marca m ON p.marca_id = m.id_marca INNER JOIN carrito c ON p.id_producto = c.id_producto WHERE c.sesion_id = ?";
+                            pstmt = conn.prepareStatement(query);
+                            pstmt.setString(1, sesion_id);
+                        }
 
-            if (rs != null) {
-                double totalCarrito = 0.0;
-                boolean hasProducts = false;
+                        rs = pstmt.executeQuery();
+
+                        if (rs != null) {
+                            double totalCarrito = 0.0;
+                            boolean hasProducts = false;
                 %>
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden p-10 justify-center">
                     <div class="overflow-x-auto">
@@ -169,27 +173,27 @@
                                 %>
                                 <tr>
                             <form action="eliminarproducto.jsp" method="post">
-                                <input type="hidden" name="id_producto" value="<%= producto_id %>">
+                                <input type="hidden" name="id_producto" value="<%= producto_id%>">
                                 <%
                                     if (idUsuario != null) {
                                 %>
-                                <input type="hidden" name="id_usuario" value="<%= idUsuario %>">
+                                <input type="hidden" name="id_usuario" value="<%= idUsuario%>">
                                 <%
-                                    } else {
+                                } else {
                                 %>
-                                <input type="hidden" name="sesion_id" value="<%= sesion_id %>">
+                                <input type="hidden" name="sesion_id" value="<%= sesion_id%>">
                                 <%
                                     }
                                 %>
                                 <td class="px-4 py-2">
                                     <div class="flex flex-col items-center">
-                                        <img src="${pageContext.request.contextPath}<%= url_imagen %>" alt="<%= marca_producto %>" class="w-16 h-16 mx-auto">
-                                        <span class="mt-2 text-xs"><%= descripcion %></span>
+                                        <img src="${pageContext.request.contextPath}<%= url_imagen%>" alt="<%= marca_producto%>" class="w-16 h-16 mx-auto">
+                                        <span class="mt-2 text-xs"><%= descripcion%></span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-2">S/<%= precio %></td>
-                                <td class="px-4 py-2"><%= cantidad %></td>
-                                <td class="px-4 py-2 text-yellow-500 font-bold">S/<%= totalProducto %></td>
+                                <td class="px-4 py-2">S/<%= precio%></td>
+                                <td class="px-4 py-2"><%= cantidad%></td>
+                                <td class="px-4 py-2 text-yellow-500 font-bold">S/<%= totalProducto%></td>
                                 <td class="px-4 py-2"><button type="submit" class="text-red-500 hover:underline">Eliminar</button></td>
                             </form>
                             </tr>
@@ -207,32 +211,32 @@
                         </table>
                     </div>
                     <div class="text-right mt-4">
-                        <span class="font-bold">Total Carrito: S/<%= totalCarrito %></span>
+                        <span class="font-bold">Total Carrito: S/<%= totalCarrito%></span>
                     </div>
                 </div>
                 <form action="datospersonales.jsp" method="post">
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 justify-center">
-                        <input type="hidden" name="totalCarrito" value="<%= totalCarrito %>">
+                        <input type="hidden" name="totalCarrito" value="<%= totalCarrito%>">
                         <%
                             if (idUsuario != null) {
                         %>
-                        <input type="hidden" name="id_usuario" value="<%= idUsuario %>">
+                        <input type="hidden" name="id_usuario" value="<%= idUsuario%>">
                         <%
-                            } else {
+                        } else {
                         %>
-                        <input type="hidden" name="sesion_id" value="<%= sesion_id %>">
+                        <input type="hidden" name="sesion_id" value="<%= sesion_id%>">
                         <%
                             }
                         %>
                         <p class="text-center text-lg font-semibold mb-4">Comprar ahora</p>
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-700">Subtotal</span>
-                            <span class="text-gray-800 font-semibold">S/<%= totalCarrito %></span>
+                            <span class="text-gray-800 font-semibold">S/<%= totalCarrito%></span>
                         </div>
                         <hr class="my-4">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-700">Total</span>
-                            <span class="text-yellow-600 font-semibold ">S/<%= totalCarrito %></span>
+                            <span class="text-yellow-600 font-semibold ">S/<%= totalCarrito%></span>
                         </div>
                         <div class="flex justify-center mt-40">
                             <button id="comprarBtn" type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg">Ir a Comprar</button>
@@ -289,7 +293,7 @@
         <script>
 
             window.onload = function () {
-                var totalCarrito = <%= totalCarrito %>;
+                var totalCarrito = <%= totalCarrito%>;
                 var comprarBtn = document.getElementById("comprarBtn");
 
                 if (totalCarrito <= 0) {
@@ -300,22 +304,26 @@
             };
         </script>
         <%
-} else {
-out.println("No se encontraron productos en el carrito.");
-}
-} catch (SQLException e) {
-e.printStackTrace();
-out.println("Error al procesar la solicitud: " + e.getMessage());
-} finally {
-try {
-if (rs != null) rs.close();
-if (pstmt != null) pstmt.close();
-mantenimiento.cerrarBD();
-} catch (SQLException e) {
-e.printStackTrace();
-out.println("Error al cerrar la conexión: " + e.getMessage());
-}
-}
+                } else {
+                    out.println("No se encontraron productos en el carrito.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                out.println("Error al procesar la solicitud: " + e.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (pstmt != null) {
+                        pstmt.close();
+                    }
+                    mantenimiento.cerrarBD();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
         %>
     </body>
 </html>

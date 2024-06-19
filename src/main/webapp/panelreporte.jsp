@@ -13,11 +13,11 @@
         response.sendRedirect("index.jsp");
         return;
     }
-    
+
     Mantenimiento mantenimiento2 = new Mantenimiento();
-mantenimiento2.conectarBD();
-List<Marca> marcas = mantenimiento2.obtenerMarcas();
-mantenimiento2.cerrarBD();
+    mantenimiento2.conectarBD();
+    List<Marca> marcas = mantenimiento2.obtenerMarcas();
+    mantenimiento2.cerrarBD();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +50,7 @@ mantenimiento2.cerrarBD();
                 <div class="dropdown dropdown-end">
                     <div>
                         <div class="indicator">
-                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario") %></span></span>
+                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario")%></span></span>
                         </div>
                     </div>
 
@@ -126,17 +126,25 @@ mantenimiento2.cerrarBD();
                     <!-- Tab 1 -->
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Ventas" checked />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 ">
-                        <form action="ReporteVentas" id="reporteForm" class="flex justify-center space-x-4" target="_blank">
-                            <div>
-                                <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-                                <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
-                            </div>
-                            <div>
-                                <label for="fecha-fin" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
-                                <input type="text" id="fecha-fin" name="fecha-fin" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
-                            </div>
-                            <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600 self-end">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
-                        </form>
+                        <form action="ReporteVentas" id="reporteForm" class="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-4" target="_blank">
+    <div>
+        <label for="fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+        <input type="text" id="fecha-inicio" name="fecha-inicio" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
+    </div>
+    <div>
+        <label for="fecha-fin" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
+        <input type="text" id="fecha-fin" name="fecha-fin" class="input input-bordered w-full max-w-xs mt-1 flatpickr" />
+    </div>
+    <div>
+        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre (Opcional)</label>
+        <input type="text" id="nombre" name="nombre" class="input input-bordered w-full max-w-xs mt-1" />
+    </div>
+    <div>
+        <label for="fecha-fin" class="block text-sm font-medium text-gray-700 lg:mt-6"></label>
+        <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600 self-end lg:self-center">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
+    </div>
+</form>
+
 
                         <div id="toastContainer" class="fixed top-24 right-4 md:top-22 md:right-6 lg:top-24 lg:right-8 h-auto w-11/12 md:w-2/3 lg:w-1/2 max-w-sm mx-auto"></div>
 
@@ -145,22 +153,24 @@ mantenimiento2.cerrarBD();
                     <!-- Tab 2 -->
                     <input type="radio" name="my_tabs_2" role="tab" class="tab font-bold  text-base" aria-label="Reportes Productos" />
                     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-                        <form action="ReporteProductos" method="GET" class="flex items-center space-x-4" id="reportForm" target="_blank">
-                            <div class="flex items-center space-x-2">
+                        <form action="ReporteProductos" method="GET" class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4" id="reportForm" target="_blank">
+                            <div class="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-2">
                                 <label for="marca" class="block text-sm font-medium text-gray-700">Marca</label>
                                 <select id="marca" name="marca" class="select select-bordered max-w-xs">
                                     <option value="todos">Todos</option>
-                                    <% for (Marca marca : marcas) { %>
-                                    <option value="<%= marca.getIdMarca() %>"><%= marca.getNombreMarca() %></option>
-                                    <% } %>
+                                    <% for (Marca marca : marcas) {%>
+                                    <option value="<%= marca.getIdMarca()%>"><%= marca.getNombreMarca()%></option>
+                                    <% }%>
                                 </select>
                             </div>
-                            <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
+                            <div class="flex justify-center lg:justify-start">
+                                <button type="submit" class="btn bg-orange-500 text-white hover:bg-orange-600">Descargar Reporte <i class="fi fi-rs-down-to-line"></i></button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-                                
+
             <script>
                 const menuBtn = document.getElementById("menu-btn");
                 const sidebar = document.getElementById("sidebar");

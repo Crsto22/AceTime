@@ -143,19 +143,21 @@
             </div>
 
             <div id="main-content" class="md:ml-72 p-8">
-                <div class="container mx-auto mt-14">
-                    <h1 class="text-3xl font-bold text-gray-800">Lista de Proveedores</h1>
-                    <div class="flex justify-end gap-2 items-center mb-4">
-                        <button class="btn btn-success text-white" onclick="my_modal_3.showModal()"> <i
-                                class="fi fi-rs-plus"></i> Agregar</button>
-                        <label class="input input-bordered flex items-center gap-2">
-                            <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
-                            <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
-                            </svg>
-                        </label>       
-
-                        <dialog id="my_modal_3" class="modal">
+                <div class="container mx-auto mt-14">           
+                    <div class="mb-4 mt-14">
+                        <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                            <button class="btn btn-success text-white flex items-center gap-2 w-full lg:w-auto" onclick="my_modal_3.showModal()">
+                                <i class="fi fi-rs-plus"></i> Agregar Proveedor
+                            </button>
+                            <label class="input input-bordered flex items-center gap-2 w-full lg:w-auto">
+                                <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                                <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                    <dialog id="my_modal_3" class="modal">
                             <div class="modal-box">
                                 <form method="dialog">
                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -163,7 +165,7 @@
 
                                     </button>
                                 </form>
-                                <div class="p-8 rounded-lg  max-w-md w-full">
+                                <div class=" rounded-lg  max-w-md w-full">
                                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Agregar Nuevo Proveedor</h2>
                                     <form action="agregarproveedor.jsp" method="post" class="space-y-4 p-4 rounded-lg">
                                         <div class="form-control">
@@ -203,7 +205,6 @@
                                 </div>
                             </div>
                         </dialog>
-                    </div>
                     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
                         <table class="table w-full">
                             <thead>

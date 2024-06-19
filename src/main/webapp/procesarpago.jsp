@@ -169,7 +169,9 @@
             } catch (SQLException ex) {
                 out.println("Error al realizar el rollback: " + ex.getMessage());
             }
-            out.println("Error de conexi?n a la base de datos: " + e.getMessage());
+            response.sendRedirect("SinStock.jsp");
+            
+            
         } finally {
             try {
                 if (con != null) {

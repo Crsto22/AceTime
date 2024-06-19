@@ -43,7 +43,7 @@
                 <div class="dropdown dropdown-end">
                     <div>
                         <div class="indicator">
-                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario") %></span></span>
+                            <span class="text-gray-500">Hola, <span class="font-bold"><%= session.getAttribute("nombreUsuario")%></span></span>
                         </div>
                     </div>
 
@@ -116,41 +116,44 @@
             </div>
 
             <div id="main-content" class="md:ml-72 p-8">
-                <div class="container mx-auto mt-16">
-                    <h1 class="text-3xl font-bold text-gray-800">Lista de Marcas</h1>
-                    <div class="flex justify-end gap-4 items-center mb-4">
-                        
-
-                        <button class="btn btn-success text-white" onclick="my_modal_3.showModal()"> <i
-                                class="fi fi-rs-plus"></i> Agregar</button>
-                         <label class="input input-bordered flex items-center gap-2">
-                            <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
-                            <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
-                            </svg>
-                        </label>         
+                <div class="container mx-auto mt-16">        
+                    <div class="mb-4 mt-14">
+                        <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                            <button class="btn btn-success text-white flex items-center gap-2 w-full lg:w-auto" onclick="my_modal_3.showModal()">
+                                <i class="fi fi-rs-plus"></i> Agregar Marca
+                            </button>
+                            <label class="input input-bordered flex items-center gap-2 w-full lg:w-auto">
+                                <input type="text" id="searchInput" class="grow" placeholder="Buscar por Nombre" onkeyup="filterTable()" />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                                <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+                                </svg>
+                            </label> 
+                        </div>
+                    </div>  
                         <dialog id="my_modal_3" class="modal">
                             <div class="modal-box">
                                 <form method="dialog">
                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
                                     </button>
                                 </form>
-                                <div class="max-w-md mx-auto p-8 rounded-lg ">
+                                <div class="max-w-md mx-auto p-8 rounded-lg">
                                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Agregar Nueva Marca</h2>
                                     <form action="agregarmarca.jsp" method="POST">
                                         <div class="mb-4">
                                             <label for="marca" class="block text-gray-700 mb-2">Nombre de la Marca</label>
-                                            <input type="text" id="marca" name="marca" class="input input-bordered w-full"
-                                                   placeholder="Nombre de la marca" required>
+                                            <input type="text" id="marca" name="marca" class="input input-bordered w-full" placeholder="Nombre de la marca" required>
                                         </div>
-                                        <button type="submit" class="btn btn-success text-white w-full">AÃ±adir
-                                            Marca</button>
+                                        <button type="submit" class="btn btn-success text-white w-full">Añadir Marca</button>
                                     </form>
                                 </div>
                             </div>
                         </dialog>
-                    </div>
+                    
+
+
                     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
                         <table class="table w-full">
                             <thead>
@@ -162,31 +165,31 @@
                             </thead>
                             <tbody>
                                 <%
-       Mantenimiento mantenimiento = new Mantenimiento();
-       Connection connection = null;
-       PreparedStatement statement = null;
-       ResultSet resultSet = null;
+                                    Mantenimiento mantenimiento = new Mantenimiento();
+                                    Connection connection = null;
+                                    PreparedStatement statement = null;
+                                    ResultSet resultSet = null;
 
-       try {
-           mantenimiento.conectarBD();
-           connection = mantenimiento.getConexion();
-           statement = connection.prepareStatement("SELECT * FROM Marca WHERE estado = 'disponible';");
-           resultSet = statement.executeQuery();
+                                    try {
+                                        mantenimiento.conectarBD();
+                                        connection = mantenimiento.getConexion();
+                                        statement = connection.prepareStatement("SELECT * FROM Marca WHERE estado = 'disponible';");
+                                        resultSet = statement.executeQuery();
 
-           while (resultSet.next()) {
+                                        while (resultSet.next()) {
                                 %>
                                 <tr class="border-b">
-                                    <td class="px-4 py-2 text-gray-700"><%= resultSet.getInt("id_marca") %></td>
-                                    <td class="px-4 py-2 text-gray-700"><%= resultSet.getString("nombre_marca") %></td>
+                                    <td class="px-4 py-2 text-gray-700"><%= resultSet.getInt("id_marca")%></td>
+                                    <td class="px-4 py-2 text-gray-700"><%= resultSet.getString("nombre_marca")%></td>
                                     <td class="px-4 py-2">
                                         <!-- BotÃ³n para editar -->
                                         <button class="btn text-white btn-warning btn-sm mr-2"
-                                                onclick="document.getElementById('edit_modal_<%= resultSet.getInt("id_marca") %>').showModal()">
+                                                onclick="document.getElementById('edit_modal_<%= resultSet.getInt("id_marca")%>').showModal()">
                                             <i class="fi fi-rs-edit"></i>
                                         </button>
 
                                         <!-- Modal para editar -->
-                                        <dialog id="edit_modal_<%= resultSet.getInt("id_marca") %>" class="modal">
+                                        <dialog id="edit_modal_<%= resultSet.getInt("id_marca")%>" class="modal">
                                             <div class="modal-box">
                                                 <form method="dialog">
                                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -198,10 +201,10 @@
                                                 <div class="max-w-md mx-auto p-8 rounded-lg">
                                                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Editar Marca</h2>
                                                     <form action="editarmarca.jsp" method="post">
-                                                        <input type="hidden" name="id_marca" value="<%= resultSet.getInt("id_marca") %>">
+                                                        <input type="hidden" name="id_marca" value="<%= resultSet.getInt("id_marca")%>">
                                                         <div class="mb-4">
                                                             <label for="nombre_marca" class="block text-gray-700 mb-2">Nombre de la Marca</label>
-                                                            <input type="text" id="nombre_marca" name="nombre_marca" class="input input-bordered w-full" placeholder="Nombre de la marca" value="<%= resultSet.getString("nombre_marca") %>" required>
+                                                            <input type="text" id="nombre_marca" name="nombre_marca" class="input input-bordered w-full" placeholder="Nombre de la marca" value="<%= resultSet.getString("nombre_marca")%>" required>
                                                         </div>
                                                         <button type="submit" class="btn btn-success text-white w-full">Actualizar Marca</button>
                                                     </form>
@@ -211,12 +214,12 @@
 
                                         <!-- BotÃ³n para eliminar -->
                                         <button class="btn text-white btn-error btn-sm"
-                                                onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_marca") %>').showModal()">
+                                                onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_marca")%>').showModal()">
                                             <i class="fi fi-rs-trash"></i>
                                         </button>
 
                                         <!-- Modal para eliminar -->
-                                        <dialog id="delete_modal_<%= resultSet.getInt("id_marca") %>" class="modal">
+                                        <dialog id="delete_modal_<%= resultSet.getInt("id_marca")%>" class="modal">
                                             <div class="modal-box">
                                                 <div class="flex items-center mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Layer_1" style="enable-background:new 0 0 128 128 ; width: 40px;" version="1.1" viewBox="0 0 128 128" xml:space="preserve">
@@ -231,13 +234,13 @@
                                                     <circle class="st0" cx="64" cy="64" r="64"/>
                                                     <path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/>
                                                     </svg>
-                                                    <h3 class="ml-6 font-bold text-lg">¿Estás seguro de eliminar la marca <%= resultSet.getString("nombre_marca") %> ?</h3>
+                                                    <h3 class="ml-6 font-bold text-lg">¿Estás seguro de eliminar la marca <%= resultSet.getString("nombre_marca")%> ?</h3>
                                                 </div>
                                                 <p class="py-4">Esta acción no se puede deshacer.</p>
                                                 <div class="flex justify-end">
-                                                    <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_marca") %>').close()">Cancelar</button>
+                                                    <button class="btn btn- mr-2 bg-slate-200" onclick="document.getElementById('delete_modal_<%= resultSet.getInt("id_marca")%>').close()">Cancelar</button>
                                                     <form action="eliminarmarca.jsp" method="post">
-                                                        <input type="hidden" name="id_marca" value="<%= resultSet.getInt("id_marca") %>">
+                                                        <input type="hidden" name="id_marca" value="<%= resultSet.getInt("id_marca")%>">
                                                         <button type="submit" class="btn btn-error text-white">Aceptar</button>
                                                     </form>
                                                 </div>
@@ -283,25 +286,25 @@
                 </div>
             </div>
             <script src="js/sidebar.js"></script>  
-         <script>
-function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.querySelector(".table");
-    tr = table.getElementsByTagName("tr");
+            <script>
+                                                        function filterTable() {
+                                                            var input, filter, table, tr, td, i, txtValue;
+                                                            input = document.getElementById("searchInput");
+                                                            filter = input.value.toUpperCase();
+                                                            table = document.querySelector(".table");
+                                                            tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) {
-        tr[i].style.display = "none"; // Ocultar la fila inicialmente
-        td = tr[i].getElementsByTagName("td")[1]; // Seleccionar solo la tercera columna (índice 2)
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
-            }
-        }
-    }
-}
-</script>
+                                                            for (i = 1; i < tr.length; i++) {
+                                                                tr[i].style.display = "none"; // Ocultar la fila inicialmente
+                                                                td = tr[i].getElementsByTagName("td")[1]; // Seleccionar solo la tercera columna (índice 2)
+                                                                if (td) {
+                                                                    txtValue = td.textContent || td.innerText;
+                                                                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                                                        tr[i].style.display = ""; // Mostrar la fila si coincide con la descripción
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+            </script>
     </body>
 </html>
