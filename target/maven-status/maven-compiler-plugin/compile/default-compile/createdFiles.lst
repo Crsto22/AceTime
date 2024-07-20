@@ -1,0 +1,11 @@
+com\mycompany\acetime\awscloud\JakartaRestConfiguration.class
+ActualizarProducto.class
+datos\Proveedor.class
+datos\Marca.class
+ReporteVentas.class
+ReporteProductos.class
+dao\IMantenimiento.class
+com\mycompany\acetime\awscloud\resources\JakartaEE10Resource.class
+datos\Mantenimiento.class
+AgregaProducto.class
+ConsultaRUC.class
